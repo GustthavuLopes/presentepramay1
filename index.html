@@ -262,11 +262,14 @@
         }
 
         function revealContent() {
+            // Permite a rolagem do corpo da página
+            document.body.style.overflow = 'auto'; 
+
             // Remove a classe 'hidden' do conteúdo principal e rodapé
             document.getElementById('main-content').classList.remove('hidden');
             document.getElementById('main-footer').classList.remove('hidden');
             document.getElementById('menuButton').classList.remove('hidden');
-            document.getElementById('sidebar').classList.remove('hidden'); // O sidebar pode ser ocultado, mas deve estar disponível
+            document.getElementById('sidebar').classList.remove('hidden'); 
         }
 
         function updateCountdown() {
@@ -298,6 +301,9 @@
             document.getElementById('main-footer').classList.add('hidden');
             document.getElementById('menuButton').classList.add('hidden');
             document.getElementById('sidebar').classList.add('hidden');
+            
+            // BLOQUEIA A ROLAGEM
+            document.body.style.overflow = 'hidden';
 
 
             // Cálculo do tempo restante
