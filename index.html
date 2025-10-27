@@ -12,6 +12,7 @@
         body {
             font-family: 'Inter', sans-serif;
             transition: margin-left 0.3s;
+            overflow-x: hidden; /* Garante que não haverá barra de rolagem horizontal */
         }
         .dancing-script {
             font-family: 'Dancing Script', cursive;
@@ -42,13 +43,38 @@
         #sidebar.open + #menuButton {
              left: 320px;
         }
+        
+        /* === EFEITO DE DIGITAÇÃO (TYPING) === */
+        .typing-text {
+            border-right: .15em solid #E91E63; /* Cor do cursor */
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        
+        /* === ANIMAÇÃO DE CORAÇÕES FLUTUANTES === */
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+        .heart {
+            color: #EF4444; /* red-500 */
+            font-size: 20px;
+            position: absolute;
+            animation: fall 10s linear infinite;
+            z-index: 10;
+            user-select: none;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body class="bg-pink-50 text-red-800 antialiased">
 
+    <!-- Container dos Corações -->
+    <div id="heart-container"></div>
+
     <!-- Botão para Abrir a Sidebar -->
     <button id="menuButton" onclick="toggleSidebar()" class="bg-rose-500 text-white font-bold p-3 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
-        <!-- Ícone de Presente (Unicode) -->
         🎁 Presentes
     </button>
 
@@ -101,18 +127,21 @@
     </aside>
 
     <!-- Seção de Abertura (Hero) -->
-    <header class="h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('foto_especial.jpg'); background-position: top;">
-        <div class="bg-white/40 p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-sm transform hover:scale-105 transition duration-500">
-            <h1 class="text-5xl md:text-7xl dancing-script font-extrabold text-rose-600 mb-4">
-                Feliz Aniversário, Minha Vida!
-            </h1>
-            <p class="text-xl md:text-2xl text-red-700 font-semibold">
-                Uma homenagem simples, mas feita com todo o meu coração.
-            </p>
-            <div class="mt-8">
-                <a href="#declaracoes" class="inline-block bg-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
-                    Começar a Jornada
-                </a>
+    <header class="h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('foto_especial.jpg'); background-size: cover; background-position: center;" id="mainHeader">
+        <div class="bg-white/50 p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-sm transform hover:scale-105 transition duration-500">
+            <!-- Título que será substituído pela contagem/digitação -->
+            <div id="header-content">
+                <h1 id="main-title" class="text-5xl md:text-7xl dancing-script font-extrabold text-rose-600 mb-4">
+                    <!-- Conteúdo dinâmico será injetado aqui -->
+                </h1>
+                <p id="main-subtitle" class="text-xl md:text-2xl text-red-700 font-semibold">
+                    <!-- Subtítulo será injetado aqui -->
+                </p>
+                <div id="cta-button" class="mt-8 hidden">
+                    <a href="#declaracoes" class="inline-block bg-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
+                        Começar a Jornada
+                    </a>
+                </div>
             </div>
         </div>
     </header>
@@ -202,6 +231,93 @@
     </footer>
 
     <script>
+        // --- CONFIGURAÇÃO DA CONTAGEM REGRESSIVA E ANIVERSÁRIO ---
+        // Configurado para: 29 de Outubro (00:00:00) do ano atual
+        const ANIVERSARIO = new Date(new Date().getFullYear(), 9, 29, 0, 0, 0); 
+        
+        // Texto que aparecerá com o efeito de digitação
+        const TITULO_FINAL = "Feliz Aniversário, Minha Vida!";
+        const SUBTITULO_FINAL = "Uma homenagem simples, mas feita com todo o meu coração.";
+        
+        // --- FUNÇÕES DE ANIMAÇÃO ---
+
+        function typeWriter(text, elementId, speed = 80) {
+            const element = document.getElementById(elementId);
+            let i = 0;
+            element.classList.add('typing-text');
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    element.classList.remove('typing-text');
+                    document.getElementById('cta-button').classList.remove('hidden');
+                }
+            }
+            type();
+        }
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = ANIVERSARIO - now;
+            const mainTitle = document.getElementById('main-title');
+            const mainSubtitle = document.getElementById('main-subtitle');
+
+            if (distance < 0) {
+                // Fim da contagem: Inicia o efeito de digitação
+                mainTitle.innerHTML = '';
+                mainSubtitle.innerHTML = '';
+                clearInterval(countdownInterval);
+                typeWriter(TITULO_FINAL, 'main-title');
+                
+                // Exibir o subtítulo imediatamente após o título final ser digitado
+                setTimeout(() => {
+                    mainSubtitle.textContent = SUBTITULO_FINAL;
+                }, TITULO_FINAL.length * 80 + 500); // 80ms * comprimento da string + 500ms de atraso
+                
+                document.getElementById('cta-button').classList.remove('hidden');
+                return;
+            }
+
+            // Cálculo do tempo restante
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            mainTitle.innerHTML = `Faltam: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+            mainSubtitle.textContent = "Aguardando a meia-noite...";
+            document.getElementById('cta-button').classList.add('hidden');
+        }
+        
+        // --- ANIMAÇÃO DE CORAÇÕES ---
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️'; // Unicode do coração
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+            heart.style.animationDuration = Math.random() * 5 + 5 + 's'; // Duração da queda: 5s a 10s
+            heart.style.opacity = Math.random() * 0.5 + 0.3; // Opacidade: 30% a 80%
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px'; // Tamanho: 10px a 25px
+            document.getElementById('heart-container').appendChild(heart);
+
+            // Remove o coração após a queda
+            setTimeout(() => {
+                heart.remove();
+            }, 10000); 
+        }
+
+        // --- INICIALIZAÇÃO ---
+        // Verifica a hora imediatamente e inicia o loop da contagem regressiva
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        
+        // Inicia a chuva de corações
+        setInterval(createHeart, 300); // Cria um novo coração a cada 300ms
+
+        // --- FUNÇÕES DE INTERAÇÃO (EXISTENTES) ---
+
         // Função do Botão Surpresa
         function revelarMensagem() {
             const mensagem = document.getElementById('mensagemSecreta');
@@ -220,36 +336,30 @@
             const sidebar = document.getElementById('sidebar');
             const menuButton = document.getElementById('menuButton');
             sidebar.classList.toggle('open');
-            // Altera a margem do corpo da página para evitar que o conteúdo fique atrás da sidebar
             document.body.style.marginLeft = sidebar.classList.contains('open') ? '300px' : '0';
         }
 
         // Função para simular o "Aviso" de Clique no Presente
         function handleGiftClick(event) {
-            // Previne a navegação imediata para que a notificação apareça
             event.preventDefault(); 
             
             const giftName = event.currentTarget.getAttribute('data-gift');
             const notificationArea = document.getElementById('notificationArea');
             const targetUrl = event.currentTarget.getAttribute('href');
 
-            // 1. Log no Console (Para Você Verificar)
             console.log(`[AVISO DO SITE] A namorada clicou no presente: ${giftName}`);
 
-            // 2. Exibir a Notificação Fictícia na Tela Dela
             notificationArea.classList.remove('hidden');
 
-            // Opcional: Esconder a notificação após alguns segundos (para não atrapalhar a leitura)
             setTimeout(() => {
                  notificationArea.classList.add('hidden');
-                 // Redireciona para o link do presente após a notificação
                  window.open(targetUrl, '_blank');
-            }, 1000); // 1 segundo de exibição da mensagem
+            }, 1000); 
 
-            // 3. (Opcional) Mudar o estilo do item clicado para mostrar que foi "selecionado"
             event.currentTarget.classList.add('bg-rose-300', 'border-rose-700');
             event.currentTarget.classList.remove('bg-pink-100');
         }
     </script>
 </body>
+</html>
 </html>
