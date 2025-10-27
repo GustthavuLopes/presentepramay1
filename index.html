@@ -12,7 +12,7 @@
         body {
             font-family: 'Inter', sans-serif;
             transition: margin-left 0.3s;
-            /* REMOVIDO: overflow-x: hidden para evitar conflito com scroll lock */
+            /* O overflow-x foi removido aqui */
         }
         .dancing-script {
             font-family: 'Dancing Script', cursive;
@@ -70,8 +70,8 @@
 </head>
 <body class="bg-pink-50 text-red-800 antialiased">
 
-    <!-- Container dos Corações -->
-    <div id="heart-container"></div>
+    <!-- Container dos Corações - AGORA FIXADO E OCULTANDO O EXCESSO DA ANIMAÇÃO -->
+    <div id="heart-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
 
     <!-- Botão para Abrir a Sidebar (INICIALMENTE ESCONDIDO) -->
     <button id="menuButton" onclick="toggleSidebar()" class="bg-rose-500 text-white font-bold p-3 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300 hidden">
