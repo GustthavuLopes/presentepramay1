@@ -11,16 +11,97 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            transition: margin-left 0.3s;
         }
         .dancing-script {
             font-family: 'Dancing Script', cursive;
+        }
+        /* Estilo para a Sidebar */
+        #sidebar {
+            width: 300px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: -300px; /* Esconde inicialmente */
+            z-index: 20;
+            transition: left 0.3s;
+        }
+        #sidebar.open {
+            left: 0;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+        }
+        /* Estilo para o Botão do Menu (fora da sidebar) */
+        #menuButton {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 30;
+            transition: left 0.3s;
+        }
+        /* Move o botão um pouco quando o menu está aberto */
+        #sidebar.open + #menuButton {
+             left: 320px;
         }
     </style>
 </head>
 <body class="bg-pink-50 text-red-800 antialiased">
 
+    <!-- Botão para Abrir a Sidebar -->
+    <button id="menuButton" onclick="toggleSidebar()" class="bg-rose-500 text-white font-bold p-3 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
+        <!-- Ícone de Presente (Unicode) -->
+        🎁 Presentes
+    </button>
+
+    <!-- Menu Lateral (Sidebar) - Conteúdo dos Presentes -->
+    <aside id="sidebar" class="bg-white p-6 overflow-y-auto border-r border-rose-200">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-rose-600">Sua Lista de Desejos!</h3>
+            <button onclick="toggleSidebar()" class="text-red-700 hover:text-red-900 font-bold text-xl">
+                &times;
+            </button>
+        </div>
+        <p class="text-slate-600 mb-6 text-sm">Clique no presente que mais te agrada para ver os detalhes! Mas atenção, o clique me avisa que você o escolheu!</p>
+
+        <!-- Container de Presentes -->
+        <div id="giftList" class="space-y-4">
+            <!-- Presente 1: Viagem -->
+            <a href="https://www.decolar.com/" target="_blank" data-gift="Viagem Romântica" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
+                <span class="text-3xl mr-3 align-middle">✈️</span>
+                <span class="font-semibold text-red-700">Viagem Romântica</span>
+                <p class="text-xs text-slate-500 mt-1">Clique para ver o destino dos sonhos!</p>
+            </a>
+            
+            <!-- Presente 2: Livros/E-reader -->
+            <a href="https://www.amazon.com.br/Kindle-11ª-Geração-tela-mais-compacta-e-leve-preta/dp/B09SWRPF1L/" target="_blank" data-gift="Leitor de Livros" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
+                <span class="text-3xl mr-3 align-middle">📚</span>
+                <span class="font-semibold text-red-700">Um Novo Mundo de Histórias</span>
+                <p class="text-xs text-slate-500 mt-1">Perfeito para as suas leituras!</p>
+            </a>
+
+            <!-- Presente 3: Spa Day -->
+            <a href="https://www.spaurbano.com.br/" target="_blank" data-gift="Dia de Spa e Relaxamento" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
+                <span class="text-3xl mr-3 align-middle">💆‍♀️</span>
+                <span class="font-semibold text-red-700">Dia de Rainha (Spa)</span>
+                <p class="text-xs text-slate-500 mt-1">Porque você merece relaxar!</p>
+            </a>
+
+            <!-- Presente 4: Surpresa (Substitua o link!) -->
+            <a href="https://www.netshoes.com.br/" target="_blank" data-gift="Aquele Tênis que Você Queria" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
+                <span class="text-3xl mr-3 align-middle">👟</span>
+                <span class="font-semibold text-red-700">Seu Desejo Secreto</span>
+                <p class="text-xs text-slate-500 mt-1">Eu prestei atenção!</p>
+            </a>
+            
+        </div>
+        
+        <div id="notificationArea" class="mt-8 p-4 bg-rose-500 text-white rounded-lg shadow hidden">
+            <p class="font-bold text-center">🚨 RECEBIDO! 🚨</p>
+            <p class="text-sm text-center">Seu clique foi registrado! Agora já sei o presente escolhido!</p>
+        </div>
+    </aside>
+
     <!-- Seção de Abertura (Hero) -->
-    <header class="h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('foto_especial.jpg'); background-size: contain; background-repeat: no-repeat;">
+    <header class="h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('foto_especial.jpg'); background-size: cover; background-position: center;" id="mainHeader">
         <div class="bg-white/90 p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-sm transform hover:scale-105 transition duration-500">
             <h1 class="text-5xl md:text-7xl dancing-script font-extrabold text-rose-600 mb-4">
                 Feliz Aniversário, Minha Vida!
@@ -38,13 +119,13 @@
 
     <main class="container mx-auto px-4 py-16">
 
-        <!--Declarações -->
+        <!-- Seção de Declarações e Mensagens (Mantenha o conteúdo original) -->
         <section id="declaracoes" class="mb-20">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-rose-600">
                 Nossas Histórias
             </h2>
 
-            <!-- Cartão 1 -->
+            <!-- Cartão 1: Onde tudo começou -->
             <div class="bg-white p-8 md:p-12 rounded-xl shadow-xl mb-10 border-t-4 border-rose-400">
                 <h3 class="text-3xl dancing-script text-red-700 mb-4">Onde Tudo Começou...</h3>
                 <p class="text-lg text-slate-700">
@@ -52,7 +133,7 @@
                 </p>
             </div>
 
-            <!-- Cartão 2 -->
+            <!-- Cartão 2: Nossas Aventuras -->
             <div class="bg-white p-8 md:p-12 rounded-xl shadow-xl mb-10 border-t-4 border-rose-400">
                 <h3 class="text-3xl dancing-script text-red-700 mb-4">Aventuras Inesquecíveis</h3>
                 <p class="text-lg text-slate-700">
@@ -61,7 +142,7 @@
             </div>
         </section>
 
-        <!-- Fotos -->
+        <!-- Seção de Galeria de Fotos (Mosaico) -->
         <section id="galeria" class="mb-20">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-rose-600">
                 Um Mosaico de Nós
@@ -97,10 +178,10 @@
         <!-- Seção Interativa (Botão Surpresa) -->
         <section id="surpresa" class="bg-rose-100 p-10 md:p-16 rounded-3xl text-center shadow-2xl">
             <h2 class="text-3xl font-bold mb-6 text-red-700">
-                Uma mensagem secreta que só a mayzinha pode ver hihi
+                Uma Mensagem Secreta
             </h2>
             <p class="text-lg text-slate-700 mb-8">
-               Clica aqui embaixo que vai aparecer mia linda
+                Clique no botão para revelar o que eu mais amo em você neste dia especial!
             </p>
 
             <button onclick="revelarMensagem()" class="bg-rose-500 text-white text-xl font-bold py-4 px-10 rounded-full shadow-lg hover:bg-rose-600 transition-all duration-300 transform hover:scale-105 active:scale-95">
@@ -109,8 +190,7 @@
 
             <div id="mensagemSecreta" class="mt-8 hidden bg-red-700 text-white p-6 rounded-lg shadow-xl border-2 border-rose-500">
                 <p class="text-2xl dancing-script font-bold">
-                    Eu te amo com toda minha alma maya, voce foi e é luz onde só tinha escuridão, mesmo você vendo meu pior lado você continou ao meu lado</br>
-                    você para sempre vai ser minha poeta, eu amo sua forma de amar, eu amo ter você, poder compartilhar minha vida com você, 
+                    O que eu mais amo em você é a sua capacidade de me fazer sentir em casa, não importa onde estejamos. Você é o meu porto seguro. Eu te amo muito!
                 </p>
             </div>
         </section>
@@ -118,10 +198,11 @@
     </main>
 
     <footer class="bg-red-700 text-white mt-16 py-8 text-center">
-        <p class="text-sm">Feito com muito amor por [Seu Nome] - &copy; [Ano Atual]</p>
+        <p class="text-sm">Feito com muito amor por [Seu Nome] - &copy; 2025</p>
     </footer>
 
     <script>
+        // Função do Botão Surpresa
         function revelarMensagem() {
             const mensagem = document.getElementById('mensagemSecreta');
             const botao = event.target; 
@@ -131,15 +212,44 @@
                 botao.textContent = 'MENSAGEM REVELADA!';
                 botao.classList.remove('bg-rose-500');
                 botao.classList.add('bg-red-900');
-            } else {
-                // Se quiser que o botão possa esconder a mensagem de novo, descomente as linhas abaixo
-                // mensagem.classList.add('hidden');
-                // botao.textContent = 'CLIQUE AQUI!';
-                // botao.classList.add('bg-rose-500');
-                // botao.classList.remove('bg-red-900');
             }
+        }
+
+        // Função para Abrir/Fechar a Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const menuButton = document.getElementById('menuButton');
+            sidebar.classList.toggle('open');
+            // Altera a margem do corpo da página para evitar que o conteúdo fique atrás da sidebar
+            document.body.style.marginLeft = sidebar.classList.contains('open') ? '300px' : '0';
+        }
+
+        // Função para simular o "Aviso" de Clique no Presente
+        function handleGiftClick(event) {
+            // Previne a navegação imediata para que a notificação apareça
+            event.preventDefault(); 
+            
+            const giftName = event.currentTarget.getAttribute('data-gift');
+            const notificationArea = document.getElementById('notificationArea');
+            const targetUrl = event.currentTarget.getAttribute('href');
+
+            // 1. Log no Console (Para Você Verificar)
+            console.log(`[AVISO DO SITE] A namorada clicou no presente: ${giftName}`);
+
+            // 2. Exibir a Notificação Fictícia na Tela Dela
+            notificationArea.classList.remove('hidden');
+
+            // Opcional: Esconder a notificação após alguns segundos (para não atrapalhar a leitura)
+            setTimeout(() => {
+                 notificationArea.classList.add('hidden');
+                 // Redireciona para o link do presente após a notificação
+                 window.open(targetUrl, '_blank');
+            }, 1000); // 1 segundo de exibição da mensagem
+
+            // 3. (Opcional) Mudar o estilo do item clicado para mostrar que foi "selecionado"
+            event.currentTarget.classList.add('bg-rose-300', 'border-rose-700');
+            event.currentTarget.classList.remove('bg-pink-100');
         }
     </script>
 </body>
 </html>
-
