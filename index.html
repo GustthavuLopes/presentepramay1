@@ -73,13 +73,13 @@
     <!-- Container dos Corações -->
     <div id="heart-container"></div>
 
-    <!-- Botão para Abrir a Sidebar -->
-    <button id="menuButton" onclick="toggleSidebar()" class="bg-rose-500 text-white font-bold p-3 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
+    <!-- Botão para Abrir a Sidebar (INICIALMENTE ESCONDIDO) -->
+    <button id="menuButton" onclick="toggleSidebar()" class="bg-rose-500 text-white font-bold p-3 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300 hidden">
         🎁 Presentes
     </button>
 
-    <!-- Menu Lateral (Sidebar) - Conteúdo dos Presentes -->
-    <aside id="sidebar" class="bg-white p-6 overflow-y-auto border-r border-rose-200">
+    <!-- Menu Lateral (Sidebar) - Conteúdo dos Presentes (INICIALMENTE ESCONDIDO) -->
+    <aside id="sidebar" class="bg-white p-6 overflow-y-auto border-r border-rose-200 hidden">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-2xl font-bold text-rose-600">Sua Lista de Desejos!</h3>
             <button onclick="toggleSidebar()" class="text-red-700 hover:text-red-900 font-bold text-xl">
@@ -128,7 +128,7 @@
 
     <!-- Seção de Abertura (Hero) -->
     <header class="h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('foto_especial.jpg'); background-size: cover; background-position: center;" id="mainHeader">
-        <div class="bg-white/50 p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-sm transform hover:scale-105 transition duration-500">
+        <div class="bg-white/70 p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-sm transform hover:scale-105 transition duration-500">
             <!-- Título que será substituído pela contagem/digitação -->
             <div id="header-content">
                 <h1 id="main-title" class="text-5xl md:text-7xl dancing-script font-extrabold text-rose-600 mb-4">
@@ -146,7 +146,8 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-16">
+    <!-- MAIN (Conteúdo Principal) - INICIALMENTE ESCONDIDO -->
+    <main class="container mx-auto px-4 py-16 hidden" id="main-content">
 
         <!-- Seção de Declarações e Mensagens (Mantenha o conteúdo original) -->
         <section id="declaracoes" class="mb-20">
@@ -226,7 +227,8 @@
 
     </main>
 
-    <footer class="bg-red-700 text-white mt-16 py-8 text-center">
+    <!-- FOOTER (Rodapé) - INICIALMENTE ESCONDIDO -->
+    <footer class="bg-red-700 text-white mt-16 py-8 text-center hidden" id="main-footer">
         <p class="text-sm">Feito com muito amor por [Seu Nome] - &copy; 2025</p>
     </footer>
 
@@ -259,6 +261,14 @@
             type();
         }
 
+        function revealContent() {
+            // Remove a classe 'hidden' do conteúdo principal e rodapé
+            document.getElementById('main-content').classList.remove('hidden');
+            document.getElementById('main-footer').classList.remove('hidden');
+            document.getElementById('menuButton').classList.remove('hidden');
+            document.getElementById('sidebar').classList.remove('hidden'); // O sidebar pode ser ocultado, mas deve estar disponível
+        }
+
         function updateCountdown() {
             const now = new Date().getTime();
             const distance = ANIVERSARIO - now;
@@ -266,7 +276,9 @@
             const mainSubtitle = document.getElementById('main-subtitle');
 
             if (distance < 0) {
-                // Fim da contagem: Inicia o efeito de digitação
+                // Fim da contagem: REVELA O CONTEÚDO
+                revealContent();
+
                 mainTitle.innerHTML = '';
                 mainSubtitle.innerHTML = '';
                 clearInterval(countdownInterval);
@@ -280,6 +292,13 @@
                 document.getElementById('cta-button').classList.remove('hidden');
                 return;
             }
+
+            // Oculta o conteúdo enquanto a contagem está ativa
+            document.getElementById('main-content').classList.add('hidden');
+            document.getElementById('main-footer').classList.add('hidden');
+            document.getElementById('menuButton').classList.add('hidden');
+            document.getElementById('sidebar').classList.add('hidden');
+
 
             // Cálculo do tempo restante
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -361,5 +380,4 @@
         }
     </script>
 </body>
-</html>
 </html>
