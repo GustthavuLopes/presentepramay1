@@ -12,7 +12,7 @@
         body {
             font-family: 'Inter', sans-serif;
             transition: margin-left 0.3s;
-            overflow-x: hidden; /* Garante que não haverá barra de rolagem horizontal */
+            /* REMOVIDO: overflow-x: hidden para evitar conflito com scroll lock */
         }
         .dancing-script {
             font-family: 'Dancing Script', cursive;
@@ -58,7 +58,8 @@
             }
         }
         .heart {
-            color: #EF4444; /* red-500 */f
+            color: #EF4444; /* red-500 */
+            font-size: 20px;
             position: absolute;
             animation: fall 10s linear infinite;
             z-index: 10;
@@ -94,8 +95,8 @@
                 <span class="text-3xl mr-3 align-middle">✈️</span>
                 <span class="font-semibold text-red-700">Viagem Romântica</span>
                 <p class="text-xs text-slate-500 mt-1">Clique para ver o destino dos sonhos!</p>
-            
             </a>
+            
             <!-- Presente 2: Livros/E-reader -->
             <a href="https://www.amazon.com.br/Kindle-11ª-Geração-tela-mais-compacta-e-leve-preta/dp/B09SWRPF1L/" target="_blank" data-gift="Leitor de Livros" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
                 <span class="text-3xl mr-3 align-middle">📚</span>
@@ -126,7 +127,7 @@
     </aside>
 
     <!-- Seção de Abertura (Hero) -->
-    <header class="h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('foto fundo principal 4.jpg'); background-size: cover; background-position: center;" id="mainHeader">
+    <header class="h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('foto_especial.jpg'); background-size: cover; background-position: center;" id="mainHeader">
         <div class="bg-white/70 p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-sm transform hover:scale-105 transition duration-500">
             <!-- Título que será substituído pela contagem/digitação -->
             <div id="header-content">
