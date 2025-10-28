@@ -11,18 +11,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            transition: margin-left 0.3s;
+            transition: margin-left 0.3s, margin-right 0.3s;
         }
         .dancing-script {
             font-family: 'Dancing Script', cursive;
         }
-        /* Estilo para a Sidebar */
+        /* Estilo para a Sidebar de Presentes (Esquerda) */
         #sidebar {
             width: 300px;
             height: 100%;
             position: fixed;
             top: 0;
-            left: -300px; /* Esconde inicialmente */
+            left: -300px;
             z-index: 20;
             transition: left 0.3s;
         }
@@ -30,7 +30,22 @@
             left: 0;
             box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
         }
-        /* Estilo para o Botão do Menu (fora da sidebar) */
+        /* Estilo para a Sidebar de Timeline (Direita) - NOVO */
+        #timelineSidebar {
+            width: 300px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            right: -300px;
+            z-index: 20;
+            background-color: #FFF;
+            transition: right 0.3s;
+        }
+        #timelineSidebar.open {
+            right: 0;
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+        }
+        /* Estilo para o Botão do Menu de Presentes (Esquerda) */
         #menuButton {
             position: fixed;
             top: 20px;
@@ -38,14 +53,23 @@
             z-index: 30;
             transition: left 0.3s;
         }
-        /* Move o botão um pouco quando o menu está aberto */
+        /* Estilo para o Botão da Timeline (Direita) - NOVO */
+        #timelineButton {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 30;
+            transition: right 0.3s;
+        }
+        
+        /* Move o botão da esquerda quando o menu esquerdo está aberto */
         #sidebar.open + #menuButton {
              left: 320px;
         }
         
         /* === EFEITO DE DIGITAÇÃO (TYPING) === */
         .typing-text {
-            border-right: .15em solid #E91E63; /* Cor do cursor */
+            border-right: .15em solid #E91E63;
             white-space: nowrap;
             overflow: hidden;
         }
@@ -57,7 +81,7 @@
             }
         }
         .heart {
-            color: #EF4444; /* red-500 */
+            color: #EF4444;
             font-size: 20px;
             position: absolute;
             animation: fall 10s linear infinite;
@@ -77,7 +101,7 @@
         @keyframes slide {
             0% { transform: translateY(0%); }
             33.33% { transform: translateY(0%); }
-            36.33% { transform: translateY(-33.33%); } /* Pequeno delay para transição */
+            36.33% { transform: translateY(-33.33%); }
             66.66% { transform: translateY(-33.33%); }
             69.66% { transform: translateY(-66.66%); }
             100% { transform: translateY(-66.66%); }
@@ -87,12 +111,12 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            height: 300%; /* 3 imagens de altura */
-            animation: slide 15s infinite ease-in-out; /* 15s de ciclo completo */
+            height: 300%;
+            animation: slide 15s infinite ease-in-out;
         }
         .carousel-item {
             width: 100%;
-            height: 33.33%; /* 1/3 da altura total para caber no container */
+            height: 33.33%;
             flex-shrink: 0;
             object-fit: cover;
             aspect-ratio: 1 / 1;
@@ -102,6 +126,24 @@
         #col-2 .carousel-track { animation-delay: -3s; }
         #col-3 .carousel-track { animation-delay: -6s; }
         #col-4 .carousel-track { animation-delay: -9s; }
+
+        /* Estilo para o mini-carrossel da Timeline */
+        .mini-carousel-track {
+            display: flex;
+            gap: 0.5rem; /* Espaço entre as fotos */
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 5px; /* Evita que o scrollbar corte a imagem */
+        }
+        .mini-carousel-track img {
+            width: 80px; /* Largura fixa para miniaturas */
+            height: 80px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            scroll-snap-align: start;
+        }
     </style>
 </head>
 <body class="bg-pink-50 text-red-800 antialiased">
@@ -109,16 +151,21 @@
     <!-- Container dos Corações - AGORA FIXADO E OCULTANDO O EXCESSO DA ANIMAÇÃO -->
     <div id="heart-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
 
-    <!-- Botão para Abrir a Sidebar (AGORA VISÍVEL) -->
-    <button id="menuButton" onclick="toggleSidebar()" class="bg-rose-500 text-white font-bold p-3 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
+    <!-- Botão para Abrir a Sidebar de Presentes (Esquerda) -->
+    <button id="menuButton" onclick="toggleSidebar('left')" class="bg-rose-500 text-white font-bold p-3 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
         🎁 Presentes
     </button>
+    
+    <!-- Botão para Abrir a Sidebar de Timeline (Direita) - NOVO -->
+    <button id="timelineButton" onclick="toggleSidebar('right')" class="bg-red-700 text-white font-bold p-3 rounded-full shadow-lg hover:bg-red-800 transition-colors duration-300">
+        🗓️ Anos
+    </button>
 
-    <!-- Menu Lateral (Sidebar) - Conteúdo dos Presentes (AGORA VISÍVEL) -->
+    <!-- Menu Lateral (Sidebar - ESQUERDA) - Conteúdo dos Presentes -->
     <aside id="sidebar" class="bg-white p-6 overflow-y-auto border-r border-rose-200">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-2xl font-bold text-rose-600">Sua Lista de Desejos!</h3>
-            <button onclick="toggleSidebar()" class="text-red-700 hover:text-red-900 font-bold text-xl">
+            <button onclick="toggleSidebar('left')" class="text-red-700 hover:text-red-900 font-bold text-xl">
                 &times;
             </button>
         </div>
@@ -162,8 +209,33 @@
         </div>
     </aside>
 
+    <!-- Menu Lateral (Sidebar - DIREITA) - Conteúdo da Timeline - NOVO -->
+    <aside id="timelineSidebar" class="bg-white p-6 overflow-y-auto border-l border-red-200">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-red-700">Nossa Linha do Tempo</h3>
+            <button onclick="toggleSidebar('right')" class="text-red-700 hover:text-red-900 font-bold text-xl">
+                &times;
+            </button>
+        </div>
+        <p class="text-slate-600 mb-6 text-sm">Clique em um ano para reviver as memórias e descobrir o que o futuro nos reserva!</p>
+
+        <!-- Container de Botões da Timeline -->
+        <div class="space-y-4">
+            <button onclick="showTimelineMessage('year1')" class="w-full text-left p-4 bg-red-100 rounded-lg shadow hover:bg-red-200 transition-colors duration-200 font-semibold text-red-800">
+                ⭐ 1 Ano (O Início)
+            </button>
+             <button onclick="showTimelineMessage('year2')" class="w-full text-left p-4 bg-red-100 rounded-lg shadow hover:bg-red-200 transition-colors duration-200 font-semibold text-red-800">
+                💍 2 Anos (A Certeza)
+            </button>
+             <button onclick="showTimelineMessage('year3')" class="w-full text-left p-4 bg-red-100 rounded-lg shadow hover:bg-red-200 transition-colors duration-200 font-semibold text-red-800">
+                ✨ 3 Anos...? (Futuro)
+            </button>
+        </div>
+        
+    </aside>
+
     <!-- Seção de Abertura (Hero) -->
-    <header class="h-[80vh] md:h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('fotodeperfildela.jpg'); background-size: cover; background-position: center;" id="mainHeader">
+    <header class="h-[80vh] md:h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('foto_especial.jpg'); background-size: cover; background-position: center;" id="mainHeader">
         <div class="bg-white/70 p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-sm transform hover:scale-105 transition duration-500">
             <!-- Título que será substituído pela contagem/digitação -->
             <div id="header-content">
@@ -178,6 +250,19 @@
                         Começar a Jornada
                     </a>
                 </div>
+            </div>
+             <!-- Card de Mensagem da Timeline (Aparece no centro) -->
+            <div id="timelineMessageCard" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-900 text-white p-8 rounded-xl shadow-2xl z-40 max-w-sm hidden border-4 border-rose-500 transition-opacity duration-300">
+                <button onclick="closeTimelineMessage()" class="absolute top-2 right-4 text-2xl font-semibold text-rose-300 hover:text-rose-100">&times;</button>
+
+                <!-- Container do Carrossel de Fotos (NOVO) -->
+                <div id="timelineCarousel" class="mb-4">
+                    <!-- Fotos injetadas via JS -->
+                    <div class="mini-carousel-track"></div>
+                </div>
+                
+                <h4 id="timelineTitle" class="text-3xl dancing-script mb-3 text-rose-300"></h4>
+                <p id="timelineText" class="text-md"></p>
             </div>
         </div>
     </header>
@@ -223,9 +308,9 @@
                 <div id="col-1" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500">
                     <div class="carousel-container aspect-square">
                         <div class="carousel-track">
-                            <img src="fotoencarando.jpg" alt="Primeiro Beijo" class="carousel-item">
-                            <img src="fotoencarando.jpg" alt="Primeiro Abraço" class="carousel-item">
-                            <img src="fotoencarando.jpg" alt="Primeiro Encontro" class="carousel-item">
+                            <img src="https://placehold.co/400x400/F08080/FFFFFF?text=Nosso+Beijo" alt="Primeiro Beijo" class="carousel-item">
+                            <img src="https://placehold.co/400x400/DC143C/FFFFFF?text=Nosso+Abraco" alt="Primeiro Abraço" class="carousel-item">
+                            <img src="https://placehold.co/400x400/FF69B4/FFFFFF?text=Nosso+Primeiro+Encontro" alt="Primeiro Encontro" class="carousel-item">
                         </div>
                     </div>
                      <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">O Início de Tudo</p>
@@ -235,9 +320,9 @@
                 <div id="col-2" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500">
                     <div class="carousel-container aspect-square">
                         <div class="carousel-track">
-                            <img src="fotoencarando.jpg" alt="Viagem à Praia" class="carousel-item">
-                            <img src="fotoencarando.jpg" alt="Viagem à Serra" class="carousel-item">
-                            <img src="fotoencarando.jpg" alt="Passeio na Cidade" class="carousel-item">
+                            <img src="https://placehold.co/400x400/9370DB/FFFFFF?text=Viagem+Praia" alt="Viagem à Praia" class="carousel-item">
+                            <img src="https://placehold.co/400x400/8A2BE2/FFFFFF?text=Viagem+Serra" alt="Viagem à Serra" class="carousel-item">
+                            <img src="https://placehold.co/400x400/BA55D3/FFFFFF?text=Passeio+na+Cidade" alt="Passeio na Cidade" class="carousel-item">
                         </div>
                     </div>
                     <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">Aventuras e Viagens</p>
@@ -247,9 +332,9 @@
                 <div id="col-3" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500">
                     <div class="carousel-container aspect-square">
                         <div class="carousel-track">
-                            <img src="fotoencarando.jpg" alt="Cine e Pipoquinha" class="carousel-item">
-                            <img src="fotoencarando.jpg" alt="Noite do Jogo" class="carousel-item">
-                            <img src="fotoencarando.jpg" alt="Cozinhando Juntos" class="carousel-item">
+                            <img src="https://placehold.co/400x400/FA8072/FFFFFF?text=Cine+e+Pipa" alt="Cine e Pipoquinha" class="carousel-item">
+                            <img src="https://placehold.co/400x400/CD5C5C/FFFFFF?text=Noite+do+Jogo" alt="Noite do Jogo" class="carousel-item">
+                            <img src="https://placehold.co/400x400/E9967A/FFFFFF?text=Cozinhando+Juntos" alt="Cozinhando Juntos" class="carousel-item">
                         </div>
                     </div>
                     <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">Momentos Aconchegantes</p>
@@ -340,6 +425,37 @@
                 text: "Olhamos para a frente com a certeza de que ainda teremos muitos sonhos para realizar. As fotos aqui simbolizam a força, a parceria e a alegria que levaremos para todos os nossos próximos capítulos."
             }
         };
+        
+        // Dados para a Linha do Tempo (Timeline) - NOVO - 10 FOTOS POR ANO
+        const TIMELINE_MESSAGES = {
+            'year1': {
+                title: "O Primeiro Ano: A Descoberta",
+                text: "O primeiro ano foi mágico. Cada dia era uma nova descoberta sobre você e sobre o amor que nascia. Aprendemos a rir juntos, a apoiar um ao outro e a construir a base de tudo que temos hoje. Lindo demais!",
+                photos: [
+                    'https://placehold.co/400x400/f8c8dc/000000?text=Ano+1%20(1)', 'https://placehold.co/400x400/f8c8dc/000000?text=Ano+1%20(2)', 'https://placehold.co/400x400/f8c8dc/000000?text=Ano+1%20(3)', 
+                    'https://placehold.co/400x400/f8c8dc/000000?text=Ano+1%20(4)', 'https://placehold.co/400x400/f8c8dc/000000?text=Ano+1%20(5)', 'https://placehold.co/400x400/f8c8dc/000000?text=Ano+1%20(6)',
+                    'https://placehold.co/400x400/f8c8dc/000000?text=Ano+1%20(7)', 'https://placehold.co/400x400/f8c8dc/000000?text=Ano+1%20(8)', 'https://placehold.co/400x400/f8c8dc/000000?text=Ano+1%20(9)', 'https://placehold.co/400x400/f8c8dc/000000?text=Ano+1%20(10)'
+                ]
+            },
+            'year2': {
+                title: "2 Anos: A Certeza e a Força",
+                text: "Nesses dois anos, enfrentamos desafios e celebramos vitórias. A certeza de que somos parceiros para a vida se fortaleceu. Você é a minha melhor amiga e a pessoa que me inspira todos os dias. Que venham muitos mais!",
+                photos: [
+                    'https://placehold.co/400x400/d5a6bd/000000?text=Ano+2%20(1)', 'https://placehold.co/400x400/d5a6bd/000000?text=Ano+2%20(2)', 'https://placehold.co/400x400/d5a6bd/000000?text=Ano+2%20(3)', 
+                    'https://placehold.co/400x400/d5a6bd/000000?text=Ano+2%20(4)', 'https://placehold.co/400x400/d5a6bd/000000?text=Ano+2%20(5)', 'https://placehold.co/400x400/d5a6bd/000000?text=Ano+2%20(6)',
+                    'https://placehold.co/400x400/d5a6bd/000000?text=Ano+2%20(7)', 'https://placehold.co/400x400/d5a6bd/000000?text=Ano+2%20(8)', 'https://placehold.co/400x400/d5a6bd/000000?text=Ano+2%20(9)', 'https://placehold.co/400x400/d5a6bd/000000?text=Ano+2%20(10)'
+                ]
+            },
+            'year3': {
+                title: "3 Anos...? E o Futuro?",
+                text: "Ainda não chegamos aos 3, mas eu mal posso esperar para saber o que nos espera! Nosso futuro está sendo escrito agora, e ele será incrível, cheio de viagens, conquistas e, claro, muito amor. (Fico no aguardo de mais momentos!)",
+                photos: [
+                    'https://placehold.co/400x400/a2688b/000000?text=Ano+3%20(1)', 'https://placehold.co/400x400/a2688b/000000?text=Ano+3%20(2)', 'https://placehold.co/400x400/a2688b/000000?text=Ano+3%20(3)', 
+                    'https://placehold.co/400x400/a2688b/000000?text=Ano+3%20(4)', 'https://placehold.co/400x400/a2688b/000000?text=Ano+3%20(5)', 'https://placehold.co/400x400/a2688b/000000?text=Ano+3%20(6)',
+                    'https://placehold.co/400x400/a2688b/000000?text=Ano+3%20(7)', 'https://placehold.co/400x400/a2688b/000000?text=Ano+3%20(8)', 'https://placehold.co/400x400/a2688b/000000?text=Ano+3%20(9)', 'https://placehold.co/400x400/a2688b/000000?text=Ano+3%20(10)'
+                ]
+            }
+        };
 
         // --- FUNÇÕES DE ANIMAÇÃO ---
 
@@ -364,12 +480,12 @@
         // --- ANIMAÇÃO DE CORAÇÕES ---
         function createHeart() {
             const heart = document.createElement('div');
-            heart.innerHTML = '❤️'; // Unicode do coração
+            heart.innerHTML = '❤️';
             heart.classList.add('heart');
             heart.style.left = Math.random() * window.innerWidth + 'px';
-            heart.style.animationDuration = Math.random() * 5 + 5 + 's'; // Duração da queda: 5s a 10s
-            heart.style.opacity = Math.random() * 0.5 + 0.3; // Opacidade: 30% a 80%
-            heart.style.fontSize = Math.random() * 15 + 10 + 'px'; // Tamanho: 10px a 25px
+            heart.style.animationDuration = Math.random() * 5 + 5 + 's';
+            heart.style.opacity = Math.random() * 0.5 + 0.3;
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
             document.getElementById('heart-container').appendChild(heart);
 
             // Remove o coração após a queda
@@ -402,6 +518,42 @@
                 textElement.textContent = data.text;
             }
         }
+        
+        // --- FUNÇÃO DA TIMELINE (ANOS) - NOVO ---
+        function showTimelineMessage(yearKey) {
+            const data = TIMELINE_MESSAGES[yearKey];
+            const card = document.getElementById('timelineMessageCard');
+            const track = document.querySelector('#timelineCarousel .mini-carousel-track');
+            
+            if (data) {
+                // 1. Limpa e insere fotos
+                track.innerHTML = '';
+                data.photos.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = data.title;
+                    track.appendChild(img);
+                });
+
+                // 2. Insere título e texto
+                document.getElementById('timelineTitle').textContent = data.title;
+                document.getElementById('timelineText').textContent = data.text;
+                
+                // 3. Mostra o card
+                card.classList.remove('hidden');
+                card.classList.add('opacity-100');
+                
+                // 4. Fecha a sidebar ao mostrar o card
+                const timelineSidebar = document.getElementById('timelineSidebar');
+                timelineSidebar.classList.remove('open');
+                document.body.style.marginRight = '0';
+            }
+        }
+        
+        function closeTimelineMessage() {
+            document.getElementById('timelineMessageCard').classList.add('hidden', 'opacity-0');
+        }
+
 
         // --- INICIALIZAÇÃO PARA TESTES (SEM BLOQUEIO POR HORA) ---
         document.addEventListener('DOMContentLoaded', function() {
@@ -442,12 +594,25 @@
             }
         }
 
-        // Função para Abrir/Fechar a Sidebar
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const menuButton = document.getElementById('menuButton');
-            sidebar.classList.toggle('open');
-            document.body.style.marginLeft = sidebar.classList.contains('open') ? '300px' : '0';
+        // Função para Abrir/Fechar a Sidebar (Geral) - ATUALIZADA
+        function toggleSidebar(side) {
+            if (side === 'left') {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('open');
+                document.body.style.marginLeft = sidebar.classList.contains('open') ? '300px' : '0';
+                
+                // Fecha a sidebar direita se estiver aberta
+                document.getElementById('timelineSidebar').classList.remove('open');
+                document.body.style.marginRight = '0';
+            } else if (side === 'right') {
+                const timelineSidebar = document.getElementById('timelineSidebar');
+                timelineSidebar.classList.toggle('open');
+                document.body.style.marginRight = timelineSidebar.classList.contains('open') ? '300px' : '0';
+                
+                // Fecha a sidebar esquerda se estiver aberta
+                document.getElementById('sidebar').classList.remove('open');
+                document.body.style.marginLeft = '0';
+            }
         }
 
         // Função para simular o "Aviso" de Clique no Presente
