@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            transition: margin-left 0.3s, margin-right 0.3s;
+            transition: margin-left 0.3s, margin-right 0.3s; /* Adicionado margin-right */
         }
         .dancing-script {
             font-family: 'Dancing Script', cursive;
@@ -22,7 +22,7 @@
             height: 100%;
             position: fixed;
             top: 0;
-            left: -300px;
+            left: -300px; /* Esconde inicialmente */
             z-index: 20;
             transition: left 0.3s;
         }
@@ -36,9 +36,9 @@
             height: 100%;
             position: fixed;
             top: 0;
-            right: -300px;
+            right: -300px; /* Esconde à direita inicialmente */
             z-index: 20;
-            background-color: #FFF;
+            background-color: #FFF; /* Cor de fundo */
             transition: right 0.3s;
         }
         #timelineSidebar.open {
@@ -69,7 +69,7 @@
         
         /* === EFEITO DE DIGITAÇÃO (TYPING) === */
         .typing-text {
-            border-right: .15em solid #E91E63;
+            border-right: .15em solid #E91E63; /* Cor do cursor */
             white-space: nowrap;
             overflow: hidden;
         }
@@ -81,7 +81,7 @@
             }
         }
         .heart {
-            color: #EF4444;
+            color: #EF4444; /* red-500 */
             font-size: 20px;
             position: absolute;
             animation: fall 10s linear infinite;
@@ -101,7 +101,7 @@
         @keyframes slide {
             0% { transform: translateY(0%); }
             33.33% { transform: translateY(0%); }
-            36.33% { transform: translateY(-33.33%); }
+            36.33% { transform: translateY(-33.33%); } /* Pequeno delay para transição */
             66.66% { transform: translateY(-33.33%); }
             69.66% { transform: translateY(-66.66%); }
             100% { transform: translateY(-66.66%); }
@@ -111,12 +111,12 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            height: 300%;
-            animation: slide 15s infinite ease-in-out;
+            height: 300%; /* 3 imagens de altura */
+            animation: slide 15s infinite ease-in-out; /* 15s de ciclo completo */
         }
         .carousel-item {
             width: 100%;
-            height: 33.33%;
+            height: 33.33%; /* 1/3 da altura total para caber no container */
             flex-shrink: 0;
             object-fit: cover;
             aspect-ratio: 1 / 1;
@@ -144,25 +144,52 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             scroll-snap-align: start;
         }
+
+        /* NOVO ESTILO: MOLDURA ROMÂNTICA PARA OS MOSAICOS */
+        .romantic-border {
+            position: relative;
+            padding: 5px; /* Espaço para a "moldura" interna */
+            background-clip: padding-box; /* Garante que a borda interna seja visível */
+            border: 1px solid transparent; /* Necessário para border-image */
+        }
+
+        .romantic-border::before {
+            content: '';
+            position: absolute;
+            top: -5px; bottom: -5px; left: -5px; right: -5px; /* Ajusta o tamanho da borda */
+            z-index: -1;
+            /* Esta é a parte mágica: usamos um gradiente repetido para simular corações/flores */
+            /* Você pode ajustar as cores e os tamanhos dos "corações" aqui */
+            background: 
+                repeating-linear-gradient(-45deg, #FF69B4 0%, #FF69B4 5px, transparent 5px, transparent 10px),
+                repeating-linear-gradient(45deg, #FF1493 0%, #FF1493 5px, transparent 5px, transparent 10px),
+                repeating-linear-gradient(135deg, #FF69B4 0%, #FF69B4 5px, transparent 5px, transparent 10px),
+                repeating-linear-gradient(-135deg, #FF1493 0%, #FF1493 5px, transparent 5px, transparent 10px);
+            background-size: 10px 10px; /* Tamanho dos "corações" */
+            border-radius: 16px; /* Para acompanhar o rounded-xl do pai */
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .romantic-border:hover::before {
+            opacity: 1; /* Brilha um pouco no hover */
+        }
+
     </style>
 </head>
 <body class="bg-pink-50 text-red-800 antialiased">
 
-    <!-- Container dos Corações - AGORA FIXADO E OCULTANDO O EXCESSO DA ANIMAÇÃO -->
-    <div id="heart-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
+    <!-- Container dos Corações - AGORA FIXADO E OCULTANDO O EXCESSO DA ANIMAÇÃO --><div id="heart-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
 
-    <!-- Botão para Abrir a Sidebar de Presentes (Esquerda) -->
-    <button id="menuButton" onclick="toggleSidebar('left')" class="bg-rose-500 text-white font-bold p-3 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
+    <!-- Botão para Abrir a Sidebar de Presentes (Esquerda) --><button id="menuButton" onclick="toggleSidebar('left')" class="bg-rose-500 text-white font-bold p-3 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
         🎁 Presentes
     </button>
     
-    <!-- Botão para Abrir a Sidebar de Timeline (Direita) - NOVO -->
-    <button id="timelineButton" onclick="toggleSidebar('right')" class="bg-red-700 text-white font-bold p-3 rounded-full shadow-lg hover:bg-red-800 transition-colors duration-300">
+    <!-- Botão para Abrir a Sidebar de Timeline (Direita) - NOVO --><button id="timelineButton" onclick="toggleSidebar('right')" class="bg-red-700 text-white font-bold p-3 rounded-full shadow-lg hover:bg-red-800 transition-colors duration-300">
         🗓️ Anos
     </button>
 
-    <!-- Menu Lateral (Sidebar - ESQUERDA) - Conteúdo dos Presentes -->
-    <aside id="sidebar" class="bg-white p-6 overflow-y-auto border-r border-rose-200">
+    <!-- Menu Lateral (Sidebar - ESQUERDA) - Conteúdo dos Presentes --><aside id="sidebar" class="bg-white p-6 overflow-y-auto border-r border-rose-200">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-2xl font-bold text-rose-600">Sua Lista de Desejos!</h3>
             <button onclick="toggleSidebar('left')" class="text-red-700 hover:text-red-900 font-bold text-xl">
@@ -171,31 +198,26 @@
         </div>
         <p class="text-slate-600 mb-6 text-sm">Clique no presente que mais te agrada para ver os detalhes! Mas atenção, o clique me avisa que você o escolheu!</p>
 
-        <!-- Container de Presentes -->
-        <div id="giftList" class="space-y-4">
-            <!-- Presente 1: Viagem -->
-            <a href="https://www.decolar.com/" target="_blank" data-gift="Viagem Romântica" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
+        <!-- Container de Presentes --><div id="giftList" class="space-y-4">
+            <!-- Presente 1: Viagem --><a href="https://www.decolar.com/" target="_blank" data-gift="Viagem Romântica" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
                 <span class="text-3xl mr-3 align-middle">✈️</span>
                 <span class="font-semibold text-red-700">Viagem Romântica</span>
                 <p class="text-xs text-slate-500 mt-1">Clique para ver o destino dos sonhos!</p>
             </a>
             
-            <!-- Presente 2: Livros/E-reader -->
-            <a href="https://www.amazon.com.br/Kindle-11ª-Geração-tela-mais-compacta-e-leve-preta/dp/B09SWRPF1L/" target="_blank" data-gift="Leitor de Livros" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
+            <!-- Presente 2: Livros/E-reader --><a href="https://www.amazon.com.br/Kindle-11ª-Geração-tela-mais-compacta-e-leve-preta/dp/B09SWRPF1L/" target="_blank" data-gift="Leitor de Livros" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
                 <span class="text-3xl mr-3 align-middle">📚</span>
                 <span class="font-semibold text-red-700">Um Novo Mundo de Histórias</span>
                 <p class="text-xs text-slate-500 mt-1">Perfeito para as suas leituras!</p>
             </a>
 
-            <!-- Presente 3: Spa Day -->
-            <a href="https://www.spaurbano.com.br/" target="_blank" data-gift="Dia de Spa e Relaxamento" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
+            <!-- Presente 3: Spa Day --><a href="https://www.spaurbano.com.br/" target="_blank" data-gift="Dia de Spa e Relaxamento" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
                 <span class="text-3xl mr-3 align-middle">💆‍♀️</span>
                 <span class="font-semibold text-red-700">Dia de Rainha (Spa)</span>
                 <p class="text-xs text-slate-500 mt-1">Porque você merece relaxar!</p>
             </a>
 
-            <!-- Presente 4: Surpresa (Substitua o link!) -->
-            <a href="https://www.netshoes.com.br/" target="_blank" data-gift="Aquele Tênis que Você Queria" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
+            <!-- Presente 4: Surpresa (Substitua o link!) --><a href="https://www.netshoes.com.br/" target="_blank" data-gift="Aquele Tênis que Você Queria" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
                 <span class="text-3xl mr-3 align-middle">👟</span>
                 <span class="font-semibold text-red-700">Seu Desejo Secreto</span>
                 <p class="text-xs text-slate-500 mt-1">Eu prestei atenção!</p>
@@ -209,8 +231,7 @@
         </div>
     </aside>
 
-    <!-- Menu Lateral (Sidebar - DIREITA) - Conteúdo da Timeline - NOVO -->
-    <aside id="timelineSidebar" class="bg-white p-6 overflow-y-auto border-l border-red-200">
+    <!-- Menu Lateral (Sidebar - DIREITA) - Conteúdo da Timeline - NOVO --><aside id="timelineSidebar" class="bg-white p-6 overflow-y-auto border-l border-red-200">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-2xl font-bold text-red-700">Nossa Linha do Tempo</h3>
             <button onclick="toggleSidebar('right')" class="text-red-700 hover:text-red-900 font-bold text-xl">
@@ -219,8 +240,7 @@
         </div>
         <p class="text-slate-600 mb-6 text-sm">Clique em um ano para reviver as memórias e descobrir o que o futuro nos reserva!</p>
 
-        <!-- Container de Botões da Timeline -->
-        <div class="space-y-4">
+        <!-- Container de Botões da Timeline --><div class="space-y-4">
             <button onclick="showTimelineMessage('year1')" class="w-full text-left p-4 bg-red-100 rounded-lg shadow hover:bg-red-200 transition-colors duration-200 font-semibold text-red-800">
                 ⭐ 1 Ano (O Início)
             </button>
@@ -234,31 +254,24 @@
         
     </aside>
 
-    <!-- Seção de Abertura (Hero) -->
-    <header class="h-[80vh] md:h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('foto_especial.jpg'); background-size: cover; background-position: center;" id="mainHeader">
+    <!-- Seção de Abertura (Hero) --><header class="h-[80vh] md:h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('fotodeperfildela.jpg'); background-size: cover; background-position: center;" id="mainHeader">
         <div class="bg-white/70 p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-sm transform hover:scale-105 transition duration-500">
-            <!-- Título que será substituído pela contagem/digitação -->
-            <div id="header-content">
+            <!-- Título que será substituído pela contagem/digitação --><div id="header-content">
                 <h1 id="main-title" class="text-5xl md:text-7xl dancing-script font-extrabold text-rose-600 mb-4">
-                    <!-- Conteúdo dinâmico será injetado aqui -->
-                </h1>
+                    <!-- Conteúdo dinâmico será injetado aqui --></h1>
                 <p id="main-subtitle" class="text-xl md:text-2xl text-red-700 font-semibold">
-                    <!-- Subtítulo será injetado aqui -->
-                </p>
+                    <!-- Subtítulo será injetado aqui --></p>
                 <div id="cta-button" class="mt-8 hidden">
                     <a href="#declaracoes" class="inline-block bg-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
                         Começar a Jornada
                     </a>
                 </div>
             </div>
-             <!-- Card de Mensagem da Timeline (Aparece no centro) -->
-            <div id="timelineMessageCard" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-900 text-white p-8 rounded-xl shadow-2xl z-40 max-w-sm hidden border-4 border-rose-500 transition-opacity duration-300">
+             <!-- Card de Mensagem da Timeline (Aparece no centro) --><div id="timelineMessageCard" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-900 text-white p-8 rounded-xl shadow-2xl z-40 max-w-sm hidden border-4 border-rose-500 transition-opacity duration-300">
                 <button onclick="closeTimelineMessage()" class="absolute top-2 right-4 text-2xl font-semibold text-rose-300 hover:text-rose-100">&times;</button>
 
-                <!-- Container do Carrossel de Fotos (NOVO) -->
-                <div id="timelineCarousel" class="mb-4">
-                    <!-- Fotos injetadas via JS -->
-                    <div class="mini-carousel-track"></div>
+                <!-- Container do Carrossel de Fotos (NOVO) --><div id="timelineCarousel" class="mb-4">
+                    <!-- Fotos injetadas via JS --><div class="mini-carousel-track"></div>
                 </div>
                 
                 <h4 id="timelineTitle" class="text-3xl dancing-script mb-3 text-rose-300"></h4>
@@ -267,25 +280,21 @@
         </div>
     </header>
 
-    <!-- MAIN (Conteúdo Principal) - AGORA VISÍVEL -->
-    <main class="container mx-auto px-4 py-16" id="main-content">
+    <!-- MAIN (Conteúdo Principal) - AGORA VISÍVEL --><main class="container mx-auto px-4 py-16" id="main-content">
 
-        <!-- Seção de Declarações e Mensagens (Mantenha o conteúdo original) -->
-        <section id="declaracoes" class="mb-20">
+        <!-- Seção de Declarações e Mensagens (Mantenha o conteúdo original) --><section id="declaracoes" class="mb-20">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-rose-600">
                 Nossas Histórias
             </h2>
 
-            <!-- Cartão 1: Onde tudo começou -->
-            <div class="bg-white p-8 md:p-12 rounded-xl shadow-xl mb-10 border-t-4 border-rose-400">
+            <!-- Cartão 1: Onde tudo começou --><div class="bg-white p-8 md:p-12 rounded-xl shadow-xl mb-10 border-t-4 border-rose-400">
                 <h3 class="text-3xl dancing-script text-red-700 mb-4">Onde Tudo Começou...</h3>
                 <p class="text-lg text-slate-700">
                     Lembro-me perfeitamente do dia em que nossos olhares se cruzaram. Foi um momento simples, mas que reescreveu todo o meu futuro. Naquele instante, algo em mim soube que você seria a pessoa que traria cor e alegria inesgotável para a minha vida. Você é o meu melhor "sim".
                 </p>
             </div>
 
-            <!-- Cartão 2: Nossas Aventuras -->
-            <div class="bg-white p-8 md:p-12 rounded-xl shadow-xl mb-10 border-t-4 border-rose-400">
+            <!-- Cartão 2: Nossas Aventuras --><div class="bg-white p-8 md:p-12 rounded-xl shadow-xl mb-10 border-t-4 border-rose-400">
                 <h3 class="text-3xl dancing-script text-red-700 mb-4">Aventuras Inesquecíveis</h3>
                 <p class="text-lg text-slate-700">
                     Desde aquela viagem de última hora até as noites tranquilas assistindo a filmes, cada momento ao seu lado é uma aventura que eu guardo com carinho. Você me ensinou o valor da simplicidade e a beleza de viver o presente. Obrigada por ser a minha companheira de todas as horas!
@@ -293,8 +302,7 @@
             </div>
         </section>
 
-        <!-- Seção de Galeria de Fotos (Mosaico Interativo) -->
-        <section id="galeria" class="mb-20">
+        <!-- Seção de Galeria de Fotos (Mosaico Interativo) --><section id="galeria" class="mb-20">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-rose-600">
                 Um Mosaico de Nós
             </h2>
@@ -304,8 +312,7 @@
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
                 
-                <!-- Coluna 1: Momentos Iniciais -->
-                <div id="col-1" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500">
+                <!-- Coluna 1: Momentos Iniciais - COM MOLDURA ROMÂNTICA --><div id="col-1" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500 romantic-border">
                     <div class="carousel-container aspect-square">
                         <div class="carousel-track">
                             <img src="https://placehold.co/400x400/F08080/FFFFFF?text=Nosso+Beijo" alt="Primeiro Beijo" class="carousel-item">
@@ -316,8 +323,7 @@
                      <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">O Início de Tudo</p>
                 </div>
 
-                <!-- Coluna 2: Aventuras e Viagens -->
-                <div id="col-2" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500">
+                <!-- Coluna 2: Aventuras e Viagens - COM MOLDURA ROMÂNTICA --><div id="col-2" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500 romantic-border">
                     <div class="carousel-container aspect-square">
                         <div class="carousel-track">
                             <img src="https://placehold.co/400x400/9370DB/FFFFFF?text=Viagem+Praia" alt="Viagem à Praia" class="carousel-item">
@@ -328,8 +334,7 @@
                     <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">Aventuras e Viagens</p>
                 </div>
 
-                <!-- Coluna 3: Momentos Fofos -->
-                <div id="col-3" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500">
+                <!-- Coluna 3: Momentos Fofos - COM MOLDURA ROMÂNTICA --><div id="col-3" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500 romantic-border">
                     <div class="carousel-container aspect-square">
                         <div class="carousel-track">
                             <img src="https://placehold.co/400x400/FA8072/FFFFFF?text=Cine+e+Pipa" alt="Cine e Pipoquinha" class="carousel-item">
@@ -340,8 +345,7 @@
                     <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">Momentos Aconchegantes</p>
                 </div>
 
-                <!-- Coluna 4: O Presente -->
-                <div id="col-4" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500">
+                <!-- Coluna 4: O Presente - COM MOLDURA ROMÂNTICA --><div id="col-4" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500 romantic-border">
                      <div class="carousel-container aspect-square">
                         <div class="carousel-track">
                             <img src="fotoencarando.jpg" alt="Foto Futuro" class="carousel-item">
@@ -353,18 +357,15 @@
                 </div>
             </div>
             
-            <!-- NOVA SEÇÃO DE ABAS E TEXTO DESCRITIVO -->
-            <div class="mt-12 bg-white p-6 rounded-xl shadow-xl border border-rose-100">
+            <!-- NOVA SEÇÃO DE ABAS E TEXTO DESCRITIVO --><div class="mt-12 bg-white p-6 rounded-xl shadow-xl border border-rose-100">
                 <div class="flex flex-wrap justify-center space-x-2 mb-6">
-                    <!-- Botões de Navegação das Abas -->
-                    <button class="tab-button bg-rose-500 text-white font-semibold py-2 px-4 rounded-full transition-colors duration-300 hover:bg-rose-600 active-tab" data-tab="col-1">O Início</button>
+                    <!-- Botões de Navegação das Abas --><button class="tab-button bg-rose-500 text-white font-semibold py-2 px-4 rounded-full transition-colors duration-300 hover:bg-rose-600 active-tab" data-tab="col-1">O Início</button>
                     <button class="tab-button bg-rose-200 text-red-700 font-semibold py-2 px-4 rounded-full transition-colors duration-300 hover:bg-rose-300" data-tab="col-2">Aventuras</button>
                     <button class="tab-button bg-rose-200 text-red-700 font-semibold py-2 px-4 rounded-full transition-colors duration-300 hover:bg-rose-300" data-tab="col-3">Aconchego</button>
                     <button class="tab-button bg-rose-200 text-red-700 font-semibold py-2 px-4 rounded-full transition-colors duration-300 hover:bg-rose-300" data-tab="col-4">O Futuro</button>
                 </div>
 
-                <!-- Conteúdo Dinâmico das Abas -->
-                <div id="tab-content" class="bg-rose-50 p-6 rounded-lg border border-rose-200 text-center">
+                <!-- Conteúdo Dinâmico das Abas --><div id="tab-content" class="bg-rose-50 p-6 rounded-lg border border-rose-200 text-center">
                     <h4 id="tab-title" class="text-2xl dancing-script text-rose-600 mb-3">O Início de Tudo</h4>
                     <p id="tab-text" class="text-slate-700 text-lg">
                         Cada relacionamento tem um ponto de partida. Aqui relembramos os primeiros sorrisos, os primeiros abraços e o momento exato em que percebemos que éramos feitos um para o outro. Foi o começo da nossa história favorita.
@@ -374,8 +375,7 @@
 
         </section>
 
-        <!-- Seção Interativa (Botão Surpresa) -->
-        <section id="surpresa" class="bg-rose-100 p-10 md:p-16 rounded-3xl text-center shadow-2xl">
+        <!-- Seção Interativa (Botão Surpresa) --><section id="surpresa" class="bg-rose-100 p-10 md:p-16 rounded-3xl text-center shadow-2xl">
             <h2 class="text-3xl font-bold mb-6 text-red-700">
                 Uma Mensagem Secreta
             </h2>
@@ -396,8 +396,7 @@
 
     </main>
 
-    <!-- FOOTER (Rodapé) - AGORA VISÍVEL -->
-    <footer class="bg-red-700 text-white mt-16 py-8 text-center" id="main-footer">
+    <!-- FOOTER (Rodapé) - AGORA VISÍVEL --><footer class="bg-red-700 text-white mt-16 py-8 text-center" id="main-footer">
         <p class="text-sm">Feito com muito amor por [Seu Nome] - &copy; 2025</p>
     </footer>
 
@@ -480,12 +479,12 @@
         // --- ANIMAÇÃO DE CORAÇÕES ---
         function createHeart() {
             const heart = document.createElement('div');
-            heart.innerHTML = '❤️';
+            heart.innerHTML = '❤️'; // Unicode do coração
             heart.classList.add('heart');
             heart.style.left = Math.random() * window.innerWidth + 'px';
-            heart.style.animationDuration = Math.random() * 5 + 5 + 's';
-            heart.style.opacity = Math.random() * 0.5 + 0.3;
-            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
+            heart.style.animationDuration = Math.random() * 5 + 5 + 's'; // Duração da queda: 5s a 10s
+            heart.style.opacity = Math.random() * 0.5 + 0.3; // Opacidade: 30% a 80%
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px'; // Tamanho: 10px a 25px
             document.getElementById('heart-container').appendChild(heart);
 
             // Remove o coração após a queda
