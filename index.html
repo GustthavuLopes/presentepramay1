@@ -12,7 +12,6 @@
         body {
             font-family: 'Inter', sans-serif;
             transition: margin-left 0.3s;
-            /* O overflow-x foi removido aqui */
         }
         .dancing-script {
             font-family: 'Dancing Script', cursive;
@@ -66,6 +65,43 @@
             user-select: none;
             pointer-events: none;
         }
+
+        /* === ANIMAÇÃO DO MOSAICO DE FOTOS === */
+        .carousel-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes slide {
+            0% { transform: translateY(0%); }
+            33.33% { transform: translateY(0%); }
+            36.33% { transform: translateY(-33.33%); } /* Pequeno delay para transição */
+            66.66% { transform: translateY(-33.33%); }
+            69.66% { transform: translateY(-66.66%); }
+            100% { transform: translateY(-66.66%); }
+        }
+
+        .carousel-track {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 300%; /* 3 imagens de altura */
+            animation: slide 15s infinite ease-in-out; /* 15s de ciclo completo */
+        }
+        .carousel-item {
+            width: 100%;
+            height: 33.33%; /* 1/3 da altura total para caber no container */
+            flex-shrink: 0;
+            object-fit: cover;
+            aspect-ratio: 1 / 1;
+        }
+        /* Adiciona um pequeno atraso para cada coluna */
+        #col-1 .carousel-track { animation-delay: 0s; }
+        #col-2 .carousel-track { animation-delay: -3s; }
+        #col-3 .carousel-track { animation-delay: -6s; }
+        #col-4 .carousel-track { animation-delay: -9s; }
     </style>
 </head>
 <body class="bg-pink-50 text-red-800 antialiased">
@@ -73,13 +109,13 @@
     <!-- Container dos Corações - AGORA FIXADO E OCULTANDO O EXCESSO DA ANIMAÇÃO -->
     <div id="heart-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
 
-    <!-- Botão para Abrir a Sidebar (INICIALMENTE ESCONDIDO) -->
-    <button id="menuButton" onclick="toggleSidebar()" class="bg-rose-500 text-white font-bold p-3 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300 hidden">
+    <!-- Botão para Abrir a Sidebar (AGORA VISÍVEL) -->
+    <button id="menuButton" onclick="toggleSidebar()" class="bg-rose-500 text-white font-bold p-3 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
         🎁 Presentes
     </button>
 
-    <!-- Menu Lateral (Sidebar) - Conteúdo dos Presentes (INICIALMENTE ESCONDIDO) -->
-    <aside id="sidebar" class="bg-white p-6 overflow-y-auto border-r border-rose-200 hidden">
+    <!-- Menu Lateral (Sidebar) - Conteúdo dos Presentes (AGORA VISÍVEL) -->
+    <aside id="sidebar" class="bg-white p-6 overflow-y-auto border-r border-rose-200">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-2xl font-bold text-rose-600">Sua Lista de Desejos!</h3>
             <button onclick="toggleSidebar()" class="text-red-700 hover:text-red-900 font-bold text-xl">
@@ -127,7 +163,7 @@
     </aside>
 
     <!-- Seção de Abertura (Hero) -->
-    <header class="h-[80vh] md:h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('foto_especial2.jpg'); background-size: cover; background-position: center;" id="mainHeader">
+    <header class="h-[80vh] md:h-screen flex flex-col justify-center items-center text-center p-6 bg-cover bg-center" style="background-image: url('foto_especial.jpg'); background-size: cover; background-position: center;" id="mainHeader">
         <div class="bg-white/70 p-8 md:p-12 rounded-3xl shadow-2xl backdrop-blur-sm transform hover:scale-105 transition duration-500">
             <!-- Título que será substituído pela contagem/digitação -->
             <div id="header-content">
@@ -146,8 +182,8 @@
         </div>
     </header>
 
-    <!-- MAIN (Conteúdo Principal) - INICIALMENTE ESCONDIDO -->
-    <main class="container mx-auto px-4 py-16 hidden" id="main-content">
+    <!-- MAIN (Conteúdo Principal) - AGORA VISÍVEL -->
+    <main class="container mx-auto px-4 py-16" id="main-content">
 
         <!-- Seção de Declarações e Mensagens (Mantenha o conteúdo original) -->
         <section id="declaracoes" class="mb-20">
@@ -172,37 +208,85 @@
             </div>
         </section>
 
-        <!-- Seção de Galeria de Fotos (Mosaico) -->
+        <!-- Seção de Galeria de Fotos (Mosaico Interativo) -->
         <section id="galeria" class="mb-20">
             <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-rose-600">
                 Um Mosaico de Nós
             </h2>
             <p class="text-xl text-center text-slate-600 mb-10">
-                Quatro lembranças que representam o nosso amor.
+                Doze momentos que representam a jornada do nosso amor.
             </p>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-                <!-- Foto 1 -->
-                <div class="rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
-                    <img src="https://placehold.co/400x400/F08080/FFFFFF?text=Nossa+Foto+1" alt="Foto de um momento especial" class="w-full h-auto object-cover aspect-square">
-                    <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">Nosso Primeiro Beijo</p>
+                
+                <!-- Coluna 1: Momentos Iniciais -->
+                <div id="col-1" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500">
+                    <div class="carousel-container aspect-square">
+                        <div class="carousel-track">
+                            <img src="https://placehold.co/400x400/F08080/FFFFFF?text=Nosso+Beijo" alt="Primeiro Beijo" class="carousel-item">
+                            <img src="https://placehold.co/400x400/DC143C/FFFFFF?text=Nosso+Abraco" alt="Primeiro Abraço" class="carousel-item">
+                            <img src="https://placehold.co/400x400/FF69B4/FFFFFF?text=Nosso+Primeiro+Encontro" alt="Primeiro Encontro" class="carousel-item">
+                        </div>
+                    </div>
+                     <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">O Início de Tudo</p>
                 </div>
-                <!-- Foto 2 -->
-                <div class="rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
-                    <img src="https://placehold.co/400x400/DC143C/FFFFFF?text=Nossa+Foto+2" alt="Foto de uma viagem" class="w-full h-auto object-cover aspect-square">
-                    <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">A Viagem Inesquecível</p>
+
+                <!-- Coluna 2: Aventuras e Viagens -->
+                <div id="col-2" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500">
+                    <div class="carousel-container aspect-square">
+                        <div class="carousel-track">
+                            <img src="https://placehold.co/400x400/9370DB/FFFFFF?text=Viagem+Praia" alt="Viagem à Praia" class="carousel-item">
+                            <img src="https://placehold.co/400x400/8A2BE2/FFFFFF?text=Viagem+Serra" alt="Viagem à Serra" class="carousel-item">
+                            <img src="https://placehold.co/400x400/BA55D3/FFFFFF?text=Passeio+na+Cidade" alt="Passeio na Cidade" class="carousel-item">
+                        </div>
+                    </div>
+                    <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">Aventuras e Viagens</p>
                 </div>
-                <!-- Foto 3 -->
-                <div class="rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
-                    <img src="https://placehold.co/400x400/FF69B4/FFFFFF?text=Nossa+Foto+3" alt="Foto favorita" class="w-full h-auto object-cover aspect-square">
-                    <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">Meu Sorriso Favorito</p>
+
+                <!-- Coluna 3: Momentos Fofos -->
+                <div id="col-3" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500">
+                    <div class="carousel-container aspect-square">
+                        <div class="carousel-track">
+                            <img src="https://placehold.co/400x400/FA8072/FFFFFF?text=Cine+e+Pipa" alt="Cine e Pipoquinha" class="carousel-item">
+                            <img src="https://placehold.co/400x400/CD5C5C/FFFFFF?text=Noite+do+Jogo" alt="Noite do Jogo" class="carousel-item">
+                            <img src="https://placehold.co/400x400/E9967A/FFFFFF?text=Cozinhando+Juntos" alt="Cozinhando Juntos" class="carousel-item">
+                        </div>
+                    </div>
+                    <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">Momentos Aconchegantes</p>
                 </div>
-                <!-- Foto 4 -->
-                <div class="rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
-                    <img src="https://placehold.co/400x400/FA8072/FFFFFF?text=Nossa+Foto+4" alt="Foto recente" class="w-full h-auto object-cover aspect-square">
-                    <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">O Dia Mais Recente</p>
+
+                <!-- Coluna 4: O Presente -->
+                <div id="col-4" class="rounded-xl shadow-lg overflow-hidden border border-rose-300 hover:shadow-2xl transition duration-500">
+                     <div class="carousel-container aspect-square">
+                        <div class="carousel-track">
+                            <img src="https://placehold.co/400x400/F4A460/FFFFFF?text=Nosso+Futuro" alt="Foto Futuro" class="carousel-item">
+                            <img src="https://placehold.co/400x400/D2B48C/FFFFFF?text=Meu+Sorriso" alt="Seu Sorriso" class="carousel-item">
+                            <img src="https://placehold.co/400x400/F0E68C/FFFFFF?text=Nosso+Amor" alt="Nosso Amor" class="carousel-item">
+                        </div>
+                    </div>
+                    <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">Nosso Próximo Capítulo</p>
                 </div>
             </div>
+            
+            <!-- NOVA SEÇÃO DE ABAS E TEXTO DESCRITIVO -->
+            <div class="mt-12 bg-white p-6 rounded-xl shadow-xl border border-rose-100">
+                <div class="flex flex-wrap justify-center space-x-2 mb-6">
+                    <!-- Botões de Navegação das Abas -->
+                    <button class="tab-button bg-rose-500 text-white font-semibold py-2 px-4 rounded-full transition-colors duration-300 hover:bg-rose-600 active-tab" data-tab="col-1">O Início</button>
+                    <button class="tab-button bg-rose-200 text-red-700 font-semibold py-2 px-4 rounded-full transition-colors duration-300 hover:bg-rose-300" data-tab="col-2">Aventuras</button>
+                    <button class="tab-button bg-rose-200 text-red-700 font-semibold py-2 px-4 rounded-full transition-colors duration-300 hover:bg-rose-300" data-tab="col-3">Aconchego</button>
+                    <button class="tab-button bg-rose-200 text-red-700 font-semibold py-2 px-4 rounded-full transition-colors duration-300 hover:bg-rose-300" data-tab="col-4">O Futuro</button>
+                </div>
+
+                <!-- Conteúdo Dinâmico das Abas -->
+                <div id="tab-content" class="bg-rose-50 p-6 rounded-lg border border-rose-200 text-center">
+                    <h4 id="tab-title" class="text-2xl dancing-script text-rose-600 mb-3">O Início de Tudo</h4>
+                    <p id="tab-text" class="text-slate-700 text-lg">
+                        Cada relacionamento tem um ponto de partida. Aqui relembramos os primeiros sorrisos, os primeiros abraços e o momento exato em que percebemos que éramos feitos um para o outro. Foi o começo da nossa história favorita.
+                    </p>
+                </div>
+            </div>
+
         </section>
 
         <!-- Seção Interativa (Botão Surpresa) -->
@@ -227,20 +311,36 @@
 
     </main>
 
-    <!-- FOOTER (Rodapé) - INICIALMENTE ESCONDIDO -->
-    <footer class="bg-red-700 text-white mt-16 py-8 text-center hidden" id="main-footer">
+    <!-- FOOTER (Rodapé) - AGORA VISÍVEL -->
+    <footer class="bg-red-700 text-white mt-16 py-8 text-center" id="main-footer">
         <p class="text-sm">Feito com muito amor por [Seu Nome] - &copy; 2025</p>
     </footer>
 
     <script>
-        // --- CONFIGURAÇÃO DA CONTAGEM REGRESSIVA E ANIVERSÁRIO ---
-        // Configurado para: 29 de Outubro (00:00:00) do ano atual
-        const ANIVERSARIO = new Date(new Date().getFullYear(), 9, 29, 0, 0, 0); 
-        
         // Texto que aparecerá com o efeito de digitação
         const TITULO_FINAL = "Feliz Aniversário, Minha Vida!";
         const SUBTITULO_FINAL = "Uma homenagem simples, mas feita com todo o meu coração.";
         
+        // Dados para a seção de Abas Interativas (Mosaico)
+        const MOSAIC_DATA = {
+            'col-1': {
+                title: "O Início de Tudo",
+                text: "Cada relacionamento tem um ponto de partida. Aqui relembramos os primeiros sorrisos, os primeiros abraços e o momento exato em que percebemos que éramos feitos um para o outro. Foi o começo da nossa história favorita."
+            },
+            'col-2': {
+                title: "Aventuras e Descobertas",
+                text: "Das viagens de carro às trilhas inesperadas, cada aventura nos ensinou algo novo sobre o mundo e, o mais importante, sobre nós dois. Momentos de liberdade, risadas e cumplicidade garantida."
+            },
+            'col-3': {
+                title: "Momentos Aconchegantes",
+                text: "Não há lugar melhor no mundo do que o sofá ao seu lado. Aqui estão as lembranças das nossas noites de pipoca, dos jantares preparados juntos e de todos os momentos simples que valem ouro."
+            },
+            'col-4': {
+                title: "O Futuro Que Nos Espera",
+                text: "Olhamos para a frente com a certeza de que ainda teremos muitos sonhos para realizar. As fotos aqui simbolizam a força, a parceria e a alegria que levaremos para todos os nossos próximos capítulos."
+            }
+        };
+
         // --- FUNÇÕES DE ANIMAÇÃO ---
 
         function typeWriter(text, elementId, speed = 80) {
@@ -260,62 +360,6 @@
             }
             type();
         }
-
-        function revealContent() {
-            // Permite a rolagem do corpo da página
-            document.body.style.overflow = 'auto'; 
-
-            // Remove a classe 'hidden' do conteúdo principal e rodapé
-            document.getElementById('main-content').classList.remove('hidden');
-            document.getElementById('main-footer').classList.remove('hidden');
-            document.getElementById('menuButton').classList.remove('hidden');
-            document.getElementById('sidebar').classList.remove('hidden'); 
-        }
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = ANIVERSARIO - now;
-            const mainTitle = document.getElementById('main-title');
-            const mainSubtitle = document.getElementById('main-subtitle');
-
-            if (distance < 0) {
-                // Fim da contagem: REVELA O CONTEÚDO
-                revealContent();
-
-                mainTitle.innerHTML = '';
-                mainSubtitle.innerHTML = '';
-                clearInterval(countdownInterval);
-                typeWriter(TITULO_FINAL, 'main-title');
-                
-                // Exibir o subtítulo imediatamente após o título final ser digitado
-                setTimeout(() => {
-                    mainSubtitle.textContent = SUBTITULO_FINAL;
-                }, TITULO_FINAL.length * 80 + 500); // 80ms * comprimento da string + 500ms de atraso
-                
-                document.getElementById('cta-button').classList.remove('hidden');
-                return;
-            }
-
-            // Oculta o conteúdo enquanto a contagem está ativa
-            document.getElementById('main-content').classList.add('hidden');
-            document.getElementById('main-footer').classList.add('hidden');
-            document.getElementById('menuButton').classList.add('hidden');
-            document.getElementById('sidebar').classList.add('hidden');
-            
-            // BLOQUEIA A ROLAGEM
-            document.body.style.overflow = 'hidden';
-
-
-            // Cálculo do tempo restante
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            mainTitle.innerHTML = `Faltam: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-            mainSubtitle.textContent = "Aguardando a meia-noite...";
-            document.getElementById('cta-button').classList.add('hidden');
-        }
         
         // --- ANIMAÇÃO DE CORAÇÕES ---
         function createHeart() {
@@ -334,12 +378,54 @@
             }, 10000); 
         }
 
-        // --- INICIALIZAÇÃO ---
-        // Verifica a hora imediatamente e inicia o loop da contagem regressiva
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        
-        // Inicia a chuva de corações
-        setInterval(createHeart, 300); // Cria um novo coração a cada 300ms
+        // --- FUNÇÃO DAS ABAS (MOSAICO) ---
+        function changeTab(tabName) {
+            const buttons = document.querySelectorAll('.tab-button');
+            const titleElement = document.getElementById('tab-title');
+            const textElement = document.getElementById('tab-text');
+            const data = MOSAIC_DATA[tabName];
+
+            // Atualiza o estado dos botões
+            buttons.forEach(button => {
+                button.classList.remove('bg-rose-500', 'text-white', 'active-tab');
+                button.classList.add('bg-rose-200', 'text-red-700');
+
+                if (button.getAttribute('data-tab') === tabName) {
+                    button.classList.add('bg-rose-500', 'text-white', 'active-tab');
+                    button.classList.remove('bg-rose-200', 'text-red-700');
+                }
+            });
+
+            // Atualiza o conteúdo do texto
+            if (data) {
+                titleElement.textContent = data.title;
+                textElement.textContent = data.text;
+            }
+        }
+
+        // --- INICIALIZAÇÃO PARA TESTES (SEM BLOQUEIO POR HORA) ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicia o efeito de digitação imediatamente
+            document.getElementById('main-title').innerHTML = '';
+            document.getElementById('main-subtitle').innerHTML = '';
+            typeWriter(TITULO_FINAL, 'main-title');
+            
+            setTimeout(() => {
+                document.getElementById('main-subtitle').textContent = SUBTITULO_FINAL;
+            }, TITULO_FINAL.length * 80 + 500); 
+
+            // Inicia a chuva de corações
+            setInterval(createHeart, 300); 
+
+            // Configura os listeners para os botões das abas
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    changeTab(e.target.getAttribute('data-tab'));
+                });
+            });
+            // Garante que a primeira aba esteja ativa ao carregar
+            changeTab('col-1');
+        });
 
         // --- FUNÇÕES DE INTERAÇÃO (EXISTENTES) ---
 
