@@ -309,9 +309,9 @@
                     
                 </p>
             </div>
-                <p class="text-lg text-slate-700">
-                    
-                </p>
+
+            <!-- Cartão 2: Nossas Aventuras --><div class="bg-white p-8 md:p-12 rounded-xl shadow-xl mb-10 border-t-4 border-rose-400">
+                <!-- Este bloco foi removido e consolidado no Cartão 1, conforme suas últimas alterações -->
             </div>
         </section>
         
@@ -332,7 +332,7 @@
                 <!-- As caixas de música serão geradas via JS para melhor organização. -->
                 <script>
                     const PLAYLIST_DATA = [
-                        { id: 'musica-1', title: 'Literalmente nosso hino.', icon: '💖', desc: 'Essa sempre pega na gente..', link: 'https://open.spotify.com/intl-pt/track/4tWQcwi8Ap3X7znREKdyAg' },
+                        { id: 'musica-1', title: 'Literalmente nosso hino.', icon: '💖', desc: 'Essa sempre pega na gente..', link: 'https://open.spotify.com/intl-pt/track/4tWQcwi8Ap3X7znREdyAg' },
                         { id: 'musica-2', title: 'Você apareceu..', icon: '💝', desc: 'Uma das primeiras que eu cantei me declarando para você em video', link: 'https://open.spotify.com/intl-pt/track/0Jm6qs9Hacb4A9Dm65oFRf' },
                         { id: 'musica-3', title: 'Pois de que vale ter..', icon: '💞', desc: 'Essa.. sem palavras.', link: 'https://open.spotify.com/intl-pt/track/6ATNNv8tZF61fa7VwDH89j' },
                         { id: 'musica-4', title: 'Não sei o que você viu..', icon: '💘', desc: 'Juntamente com a segunda.. músicas que me lembram você, me deixam feliz e poderia cantar para você por dias.', link: 'https://open.spotify.com/intl-pt/track/3XQmIGBEjaueBGRJxeAcIW' },
@@ -512,7 +512,7 @@
             'year2': {
                 title: "A prova e recomeço.",
                 text: "Esse ano foi o mais baixo que a gente poderia ter em 100 universos, em 100 tentativas e a gente está superando mesmo dando uma merda ABSURDA.. a gente superou isso, estamos reconstruindo algo que foi destruído e espero que fiquemos juntos para sempre e passemos essa fase juntos meu amor, eu te amo.",
-                // Nomes dos arquivos de 2023 fornecidos pelo usuário
+                // CORREÇÃO FINAL: Usando os nomes 2025A-L conforme a última solicitação para year2
                 photos: [
                     'foto2025A.jpg', 'foto2025B.jpg', 'foto2025C.jpg', 
                     'foto2025D.jpg', 'foto2025E.jpg', 'foto2025F.jpg',
@@ -699,7 +699,7 @@
             }, 100); 
         }
 
-        // --- INICIALIZAÇÃO NO DOMContentLoaded (AGORA NO MODO DE TESTE) ---
+        // --- INICIALIZAÇÃO NO DOMContentLoaded (MODO VISÍVEL PARA TESTE) ---
         document.addEventListener('DOMContentLoaded', function() {
             // 1. Revela o conteúdo principal imediatamente
             document.getElementById('main-content').classList.remove('hidden');
@@ -716,7 +716,7 @@
                 <p id="main-subtitle" class="text-xl md:text-2xl text-red-700 font-semibold"></p>
                 <div id="cta-button" class="mt-8 hidden">
                     <a href="#declaracoes" class="inline-block bg-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
-                        Clica aqui para começar a ler o que o gu escreveu com muito amor pra may.
+                        Clica aqui para começar a ler o que o gu escreveu.
                     </a>
                 </div>
             `;
