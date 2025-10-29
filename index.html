@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            transition: margin-left 0.3s, margin-right 0.3s; /* Adicionado margin-right */
+            transition: margin-left 0.3s, margin-right 0.3s;
         }
         .dancing-script {
             font-family: 'Dancing Script', cursive;
@@ -22,7 +22,7 @@
             height: 100%;
             position: fixed;
             top: 0;
-            left: -300px; /* Esconde inicialmente */
+            left: -300px;
             z-index: 20;
             transition: left 0.3s;
         }
@@ -36,9 +36,9 @@
             height: 100%;
             position: fixed;
             top: 0;
-            right: -300px; /* Esconde à direita inicialmente */
+            right: -300px;
             z-index: 20;
-            background-color: #FFF; /* Cor de fundo */
+            background-color: #FFF;
             transition: right 0.3s;
         }
         #timelineSidebar.open {
@@ -69,7 +69,7 @@
         
         /* === EFEITO DE DIGITAÇÃO (TYPING) === */
         .typing-text {
-            border-right: .15em solid #E91E63; /* Cor do cursor */
+            border-right: .15em solid #E91E63;
             white-space: nowrap;
             overflow: hidden;
         }
@@ -81,7 +81,7 @@
             }
         }
         .heart {
-            color: #EF4444; /* red-500 */
+            color: #EF4444;
             font-size: 20px;
             position: absolute;
             animation: fall 10s linear infinite;
@@ -101,7 +101,7 @@
         @keyframes slide {
             0% { transform: translateY(0%); }
             33.33% { transform: translateY(0%); }
-            36.33% { transform: translateY(-33.33%); } /* Pequeno delay para transição */
+            36.33% { transform: translateY(-33.33%); }
             66.66% { transform: translateY(-33.33%); }
             69.66% { transform: translateY(-66.66%); }
             100% { transform: translateY(-66.66%); }
@@ -111,12 +111,12 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            height: 300%; /* 3 imagens de altura */
-            animation: slide 15s infinite ease-in-out; /* 15s de ciclo completo */
+            height: 300%;
+            animation: slide 15s infinite ease-in-out;
         }
         .carousel-item {
             width: 100%;
-            height: 33.33%; /* 1/3 da altura total para caber no container */
+            height: 33.33%;
             flex-shrink: 0;
             object-fit: cover;
             aspect-ratio: 1 / 1;
@@ -130,13 +130,13 @@
         /* Estilo para o mini-carrossel da Timeline */
         .mini-carousel-track {
             display: flex;
-            gap: 0.5rem; /* Espaço entre as fotos */
+            gap: 0.5rem;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
-            padding-bottom: 5px; /* Evita que o scrollbar corte a imagem */
+            padding-bottom: 5px;
         }
         .mini-carousel-track img {
-            width: 80px; /* Largura fixa para miniaturas */
+            width: 80px;
             height: 80px;
             object-fit: cover;
             flex-shrink: 0;
@@ -148,31 +148,39 @@
         /* NOVO ESTILO: MOLDURA ROMÂNTICA PARA OS MOSAICOS */
         .romantic-border {
             position: relative;
-            padding: 5px; /* Espaço para a "moldura" interna */
-            background-clip: padding-box; /* Garante que a borda interna seja visível */
-            border: 1px solid transparent; /* Necessário para border-image */
+            padding: 5px;
+            background-clip: padding-box;
+            border: 1px solid transparent;
         }
 
         .romantic-border::before {
             content: '';
             position: absolute;
-            top: -5px; bottom: -5px; left: -5px; right: -5px; /* Ajusta o tamanho da borda */
+            top: -5px; bottom: -5px; left: -5px; right: -5px;
             z-index: -1;
-            /* Esta é a parte mágica: usamos um gradiente repetido para simular corações/flores */
-            /* Você pode ajustar as cores e os tamanhos dos "corações" aqui */
             background: 
                 repeating-linear-gradient(-45deg, #FF69B4 0%, #FF69B4 5px, transparent 5px, transparent 10px),
                 repeating-linear-gradient(45deg, #FF1493 0%, #FF1493 5px, transparent 5px, transparent 10px),
                 repeating-linear-gradient(135deg, #FF69B4 0%, #FF69B4 5px, transparent 5px, transparent 10px),
                 repeating-linear-gradient(-135deg, #FF1493 0%, #FF1493 5px, transparent 5px, transparent 10px);
-            background-size: 10px 10px; /* Tamanho dos "corações" */
-            border-radius: 16px; /* Para acompanhar o rounded-xl do pai */
+            background-size: 10px 10px;
+            border-radius: 16px;
             opacity: 0.8;
             transition: opacity 0.3s;
         }
 
         .romantic-border:hover::before {
-            opacity: 1; /* Brilha um pouco no hover */
+            opacity: 1;
+        }
+
+        /* Estilo para as caixas de música */
+        .music-box {
+            min-height: 150px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .music-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(255, 192, 203, 0.7); /* Sombra rosa suave */
         }
 
     </style>
@@ -221,13 +229,12 @@
                 <span class="text-3xl mr-3 align-middle">👟</span>
                 <span class="font-semibold text-red-700">Sua decisão.</span>
                 <p class="text-xs text-slate-500 mt-1">Escolha se você me quiser.!</p>
-                            </a>
+            </a>
 
             <!-- Presente 5: Reclame aqui --><a href="https://forms.gle/NLQEPSQYPsirqBPu9" data-gift="RECLAME AQUI!" onclick="handleGiftClick(event)" class="gift-item block p-4 bg-pink-100 rounded-lg shadow hover:bg-pink-200 transition-colors duration-200 cursor-pointer">
                 <span class="text-3xl mr-3 align-middle">⚠️</span>
                 <span class="font-semibold text-red-700">Pode reclamar do que você quiser aqui.</span>
                 <p class="text-xs text-slate-500 mt-1">Pode reclamar se eu não fizer algo, se você se decepcionar, pode falar sempre!</p>
-            </a>
             </a>
             
         </div>
@@ -299,16 +306,68 @@
             <!-- Cartão 1: Onde tudo começou --><div class="bg-white p-8 md:p-12 rounded-xl shadow-xl mb-10 border-t-4 border-rose-400">
                 <h3 class="text-3xl dancing-script text-red-700 mb-4">Eu fiz isso para representar, tipo 0,01% do meu amor por você.. você está completando 17 anos e está se tornando uma pessoa inspiradora, determinada, inteligente, bonita, você merece mais que o mundo meu amor, você merece todas as estrelas do universo, todas as supernovas, planetas para poder compreender o quão maravilhosa você é. </h3>
                 <p class="text-lg text-slate-700">
-                   
+                    
                 </p>
             </div>
-
-            <!-- Cartão 2: Nossas Aventuras --><div class="bg-white p-8 md:p-12 rounded-xl shadow-xl mb-10 border-t-4 border-rose-400">
-                <h3 class="text-3xl dancing-script text-red-700 mb-4">sem nada ainda</h3>
                 <p class="text-lg text-slate-700">
-                   
+                    
                 </p>
             </div>
+        </section>
+        
+        <!-- NOVA SEÇÃO: MELODIA DO NOSSO AMOR (Músicas) --><section id="musicas" class="mb-20">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-rose-600">
+                Ouça minha rainha. 🎧
+            </h2>
+            <div class="bg-white p-8 md:p-12 rounded-xl shadow-xl border-b-4 border-rose-400 mb-10 text-center">
+                <p class="text-xl dancing-script text-red-700 mb-6">
+                    Essas músicas fizeram épocas nas nossas vidas.. tanto eu cantando para você, quanto juntos e são importantes, espero que goste!
+                </p>
+                <p class="text-lg text-slate-700">
+                    Clique em qualquer uma delas e você vai amar💖.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+                <!-- As caixas de música serão geradas via JS para melhor organização. -->
+                <script>
+                    const PLAYLIST_DATA = [
+                        { id: 'musica-1', title: 'Literalmente nosso hino.', icon: '💖', desc: 'Essa sempre pega na gente..', link: 'https://open.spotify.com/intl-pt/track/4tWQcwi8Ap3X7znREKdyAg' },
+                        { id: 'musica-2', title: 'Você apareceu..', icon: '💝', desc: 'Uma das primeiras que eu cantei me declarando para você em video', link: 'https://open.spotify.com/intl-pt/track/0Jm6qs9Hacb4A9Dm65oFRf' },
+                        { id: 'musica-3', title: 'Pois de que vale ter..', icon: '💞', desc: 'Essa.. sem palavras.', link: 'https://open.spotify.com/intl-pt/track/6ATNNv8tZF61fa7VwDH89j' },
+                        { id: 'musica-4', title: 'Não sei o que você viu..', icon: '💘', desc: 'Juntamente com a segunda.. músicas que me lembram você, me deixam feliz e poderia cantar para você por dias.', link: 'https://open.spotify.com/intl-pt/track/3XQmIGBEjaueBGRJxeAcIW' },
+                    ];
+
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const musicSection = document.getElementById('musicas');
+                        const musicGrid = document.createElement('div');
+                        musicGrid.className = 'grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8';
+                        
+                        PLAYLIST_DATA.forEach(item => {
+                            const box = document.createElement('a');
+                            box.href = item.link;
+                            box.target = '_blank';
+                            box.className = 'music-box block p-4 rounded-xl shadow-md bg-white border border-rose-300 text-center cursor-pointer hover:bg-rose-50 transition duration-200';
+                            box.setAttribute('data-music', item.title);
+                            box.onclick = handleMusicClick; // Reutiliza a lógica de clique
+
+                            box.innerHTML = `
+                                <span class="text-4xl block mb-2">${item.icon}</span>
+                                <h4 class="font-bold text-red-700 mb-1">${item.title}</h4>
+                                <p class="text-xs text-slate-500">${item.desc}</p>
+                            `;
+                            musicGrid.appendChild(box);
+                        });
+                        
+                        const musicContainer = document.querySelector('#musicas > div:last-child');
+                        musicContainer.parentNode.insertBefore(musicGrid, musicContainer.nextSibling);
+                        
+                    });
+                    
+                    // Note: A função handleMusicClick será definida no script principal
+                </script>
+            </div>
+            
         </section>
 
         <!-- Seção de Galeria de Fotos (Mosaico Interativo) --><section id="galeria" class="mb-20">
@@ -338,6 +397,7 @@
                             <img src="foto4dela.jpg" alt="Minha" class="carousel-item">
                             <img src="foto5dela.jpg" alt="Garota" class="carousel-item">
                             <img src="foto6dela.jpg" alt="Mais" class="carousel-item">
+                            
                         </div>
                     </div>
                     <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">Aventuras e Viagens</p>
@@ -349,6 +409,7 @@
                             <img src="foto7dela.jpg" alt="Linda" class="carousel-item">
                             <img src="foto8dela.jpg" alt="Desse" class="carousel-item">
                             <img src="foto9dela.jpg" alt="Mundo" class="carousel-item">
+                            
                         </div>
                     </div>
                     <p class="text-center bg-rose-200 text-red-700 py-2 text-sm font-medium">Momentos Aconchegantes</p>
@@ -388,6 +449,10 @@
             <h2 class="text-3xl font-bold mb-6 text-red-700">
                 Uma mensagem absurdamente secreta e legal para may ficar feliz.
             </h2>
+            <p class="text-lg text-slate-700 mb-8">
+                Clique no botão para revelar o que eu mais amo em você neste dia especial!
+            </p>
+
             <button onclick="revelarMensagem()" class="bg-rose-500 text-white text-xl font-bold py-4 px-10 rounded-full shadow-lg hover:bg-rose-600 transition-all duration-300 transform hover:scale-105 active:scale-95">
                 CLIQUE AQUI PARA LER ALGO QUE SÓ A MAY PODI LER!
             </button>
@@ -425,11 +490,11 @@
             },
             'col-3': {
                 title: "Deus.",
-                text: "Não há lugar melhor no mundo do que o sofá ao seu lado. Aqui estão as lembranças das nossas noites de pipoca, dos jantares preparados juntos e de todos os momentos simples que valem ouro."
+                text: "Por onde eu começo com esse assunto?.. Vamos lá, Deus me deu você.. e você me levou para conhecer Ele, eu sou extremamente grato por isso e nós precisamos voltar definitivamente para Ele, voltarmos a ser os filhinhos dele may, você tem vontade, eu tenho vontade e ele de braços e portas abertas, só basta fazer e voltarmos para Ele meu amor."
             },
             'col-4': {
                 title: "Nós.",
-                text: "Olhamos para a frente com a certeza de que ainda teremos muitos sonhos para realizar. As fotos aqui simbolizam a força, a parceria e a alegria que levaremos para todos os nossos próximos capítulos."
+                text: "Acho que nunca vai existir ou eu vou ver um relacionamento tão maluco quanto o nosso, mas o importante é que estamos entrando nos trilhos e criamos histórias o suficiente para 3 gerações seguintes dos nossos filhos, mas tirando nosso passado, o foco é no futuro amor, eu te amo e quero fazer esse amor florescer igual uma rosa em um jardim bem cuidado por nosso Pai, eu sempre estarei ao seu lado independente da nossa situação, eu me jogo na bala por você. "
             }
         };
         
@@ -449,9 +514,9 @@
                 text: "Esse ano foi o mais baixo que a gente poderia ter em 100 universos, em 100 tentativas e a gente está superando mesmo dando uma merda ABSURDA.. a gente superou isso, estamos reconstruindo algo que foi destruído e espero que fiquemos juntos para sempre e passemos essa fase juntos meu amor, eu te amo.",
                 // Nomes dos arquivos de 2023 fornecidos pelo usuário
                 photos: [
-                    'foto2025A.jpg', 'foto2025B.jpg', 'foto2025C.jpg', 
-                    'foto2025D.jpg', 'foto2025E.jpg', 'foto2025F.jpg',
-                    'foto2025G.jpg', 'foto2025H.jpg', 'foto2025I.jpg', 'foto2025L.jpg'
+                    'foto2023banheiro.jpg', 'foto2023floresta.jpg', 'foto2023cabelonovo.jpg', 
+                    'foto2023dengue.jpg', 'foto2023gardhon.jpg', 'foto2023gardhon2.jpg',
+                    'foto2023primeirodesenho.jpg', 'foto2023olhospequenos.jpg', 'foto2023museu.jpg', 'foto2023assustador.jpg'
                 ]
             },
             'year3': {
@@ -619,10 +684,23 @@
             event.currentTarget.classList.remove('bg-pink-100');
         }
 
+        // --- FUNÇÃO DE CLIQUE DE MÚSICA (NOVA) ---
+        function handleMusicClick(event) {
+            event.preventDefault(); 
+            const musicName = event.currentTarget.getAttribute('data-music');
+            const targetUrl = event.currentTarget.getAttribute('href');
+
+            // Simula uma notificação no console
+            console.log(`[MÚSICA] A Mayzinha clicou em: ${musicName}`);
+
+            // Abre o link da música em nova aba após um pequeno delay visual (para dar tempo de ver a caixa acender)
+            setTimeout(() => {
+                 window.open(targetUrl, '_blank');
+            }, 100); 
+        }
+
         // --- INICIALIZAÇÃO NO DOMContentLoaded (AGORA NO MODO DE TESTE) ---
         document.addEventListener('DOMContentLoaded', function() {
-            // REMOVIDO BLOQUEIO DE SCROLL
-            
             // 1. Revela o conteúdo principal imediatamente
             document.getElementById('main-content').classList.remove('hidden');
             document.getElementById('main-footer').classList.remove('hidden');
@@ -638,7 +716,7 @@
                 <p id="main-subtitle" class="text-xl md:text-2xl text-red-700 font-semibold"></p>
                 <div id="cta-button" class="mt-8 hidden">
                     <a href="#declaracoes" class="inline-block bg-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-rose-600 transition-colors duration-300">
-                        Começar a ler o que o gu escreveu com muito amor pra may.
+                        Clica aqui para começar a ler o que o gu escreveu com muito amor pra may.
                     </a>
                 </div>
             `;
