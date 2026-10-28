@@ -183,9 +183,36 @@
             box-shadow: 0 10px 15px rgba(255, 192, 203, 0.7); /* Sombra rosa suave */
         }
 
+        /* TELA PRETA DE ENCERRAMENTO */
+        #finalOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            animation: fadeInOverlay 1.5s ease forwards;
+        }
+
+        @keyframes fadeInOverlay {
+            to { opacity: 1; }
+        }
+
     </style>
 </head>
 <body class="bg-pink-50 text-red-800 antialiased">
+
+    <!-- TELA PRETA COM A MENSAGEM -->
+    <div id="finalOverlay">
+        <h1 class="dancing-script text-5xl md:text-7xl text-white font-bold tracking-wider text-center px-4">
+            até a próxima?..
+        </h1>
+    </div>
 
     <!-- Container dos Corações - AGORA FIXADO E OCULTANDO O EXCESSO DA ANIMAÇÃO --><div id="heart-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
 
@@ -363,8 +390,6 @@
                         musicContainer.parentNode.insertBefore(musicGrid, musicContainer.nextSibling);
                         
                     });
-                    
-                    // Note: A função handleMusicClick será definida no script principal
                 </script>
             </div>
             
@@ -476,7 +501,6 @@
         const SUBTITULO_FINAL = "Espero que você goste disso may.. fiz com todo meu coração💓.";
         
         // Data alvo para a contagem regressiva: 29 de Outubro de 2025 à meia-noite
-        // ATENÇÃO: Esta data será usada para iniciar o timer
         const TARGET_DATE = new Date("October 29, 2025 00:00:00").getTime(); 
 
         // Dados para a seção de Abas Interativas (Mosaico)
@@ -513,7 +537,6 @@
             'year2': {
                 title: "A prova e recomeço.",
                 text: "Esse ano foi o mais baixo que a gente poderia ter em 100 universos, em 100 tentativas e a gente está superando mesmo dando uma merda ABSURDA.. a gente superou isso, estamos reconstruindo algo que foi destruído e espero que fiquemos juntos para sempre e passemos essa fase juntos meu amor, eu te amo.",
-                // CORREÇÃO FINAL: Usando os nomes 2025A-L conforme a última solicitação para year2
                 photos: [
                     'foto2025A.jpg', 'foto2025B.jpg', 'foto2025C.jpg', 
                     'foto2025D.jpg', 'foto2025E.jpg', 'foto2025F.jpg',
@@ -554,15 +577,14 @@
         // --- ANIMAÇÃO DE CORAÇÕES ---
         function createHeart() {
             const heart = document.createElement('div');
-            heart.innerHTML = '❤️'; // Unicode do coração
+            heart.innerHTML = '❤️'; 
             heart.classList.add('heart');
             heart.style.left = Math.random() * window.innerWidth + 'px';
-            heart.style.animationDuration = Math.random() * 5 + 5 + 's'; // Duração da queda: 5s a 10s
-            heart.style.opacity = Math.random() * 0.5 + 0.3; // Opacidade: 30% a 80%
-            heart.style.fontSize = Math.random() * 15 + 10 + 'px'; // Tamanho: 10px a 25px
+            heart.style.animationDuration = Math.random() * 5 + 5 + 's'; 
+            heart.style.opacity = Math.random() * 0.5 + 0.3; 
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px'; 
             document.getElementById('heart-container').appendChild(heart);
 
-            // Remove o coração após a queda
             setTimeout(() => {
                 heart.remove();
             }, 10000); 
@@ -575,7 +597,6 @@
             const textElement = document.getElementById('tab-text');
             const data = MOSAIC_DATA[tabName];
 
-            // Atualiza o estado dos botões
             buttons.forEach(button => {
                 button.classList.remove('bg-rose-500', 'text-white', 'active-tab');
                 button.classList.add('bg-rose-200', 'text-red-700');
@@ -586,7 +607,6 @@
                 }
             });
 
-            // Atualiza o conteúdo do texto
             if (data) {
                 titleElement.textContent = data.title;
                 textElement.textContent = data.text;
@@ -600,7 +620,6 @@
             const track = document.querySelector('#timelineCarousel .mini-carousel-track');
             
             if (data) {
-                // 1. Limpa e insere fotos
                 track.innerHTML = '';
                 data.photos.forEach(src => {
                     const img = document.createElement('img');
@@ -609,15 +628,12 @@
                     track.appendChild(img);
                 });
 
-                // 2. Insere título e texto
                 document.getElementById('timelineTitle').textContent = data.title;
                 document.getElementById('timelineText').textContent = data.text;
                 
-                // 3. Mostra o card
                 card.classList.remove('hidden');
                 card.classList.add('opacity-100');
                 
-                // 4. Fecha a sidebar ao mostrar o card
                 const timelineSidebar = document.getElementById('timelineSidebar');
                 timelineSidebar.classList.remove('open');
                 document.body.style.marginRight = '0';
@@ -628,19 +644,13 @@
             document.getElementById('timelineMessageCard').classList.add('hidden', 'opacity-0');
         }
 
-        // --- FUNÇÕES DE CONTAGEM REGRESSIVA E REVELAÇÃO ---
-        
         function revealContent() {
-            // 1. Restaura a rolagem do corpo da página
             document.body.style.overflow = 'auto';
-
-            // 2. Revela o conteúdo principal
             document.getElementById('main-content').classList.remove('hidden');
             document.getElementById('main-footer').classList.remove('hidden');
             document.getElementById('menuButton').classList.remove('hidden');
             document.getElementById('timelineButton').classList.remove('hidden');
             
-            // 3. Substitui o contador pelo efeito de digitação
             document.getElementById('header-content').innerHTML = `
                 <h1 id="main-title" class="text-5xl md:text-7xl dancing-script font-extrabold text-rose-600 mb-4"></h1>
                 <p id="main-subtitle" class="text-xl md:text-2xl text-red-700 font-semibold"></p>
@@ -671,7 +681,6 @@
                 return;
             }
 
-            // Bloqueia o scroll enquanto espera
             document.body.style.overflow = 'hidden'; 
             
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -684,9 +693,6 @@
 
         let countdownInterval;
 
-        // --- FUNÇÕES DE INTERAÇÃO (EXISTENTES) ---
-
-        // Função do Botão Surpresa
         function revelarMensagem() {
             const mensagem = document.getElementById('mensagemSecreta');
             const botao = event.target; 
@@ -699,14 +705,12 @@
             }
         }
 
-        // Função para Abrir/Fechar a Sidebar (Geral) - ATUALIZADA
         function toggleSidebar(side) {
             if (side === 'left') {
                 const sidebar = document.getElementById('sidebar');
                 sidebar.classList.toggle('open');
                 document.body.style.marginLeft = sidebar.classList.contains('open') ? '300px' : '0';
                 
-                // Fecha a sidebar direita se estiver aberta
                 document.getElementById('timelineSidebar').classList.remove('open');
                 document.body.style.marginRight = '0';
             } else if (side === 'right') {
@@ -714,21 +718,16 @@
                 timelineSidebar.classList.toggle('open');
                 document.body.style.marginRight = timelineSidebar.classList.contains('open') ? '300px' : '0';
                 
-                // Fecha a sidebar esquerda se estiver aberta
                 document.getElementById('sidebar').classList.remove('open');
                 document.body.style.marginLeft = '0';
             }
         }
 
-        // Função para simular o "Aviso" de Clique no Presente
         function handleGiftClick(event) {
             event.preventDefault(); 
-            
             const giftName = event.currentTarget.getAttribute('data-gift');
             const notificationArea = document.getElementById('notificationArea');
             const targetUrl = event.currentTarget.getAttribute('href');
-
-            console.log(`[AVISO DO SITE] A namorada clicou no presente: ${giftName}`);
 
             notificationArea.classList.remove('hidden');
 
@@ -741,29 +740,20 @@
             event.currentTarget.classList.remove('bg-pink-100');
         }
 
-        // --- FUNÇÃO DE CLIQUE DE MÚSICA (NOVA) ---
         function handleMusicClick(event) {
             event.preventDefault(); 
-            const musicName = event.currentTarget.getAttribute('data-music');
             const targetUrl = event.currentTarget.getAttribute('href');
 
-            // Simula uma notificação no console
-            console.log(`[MÚSICA] A Mayzinha clicou em: ${musicName}`);
-
-            // Abre o link da música em nova aba após um pequeno delay visual (para dar tempo de ver a caixa acender)
             setTimeout(() => {
                  window.open(targetUrl, '_blank');
             }, 100); 
         }
 
-        // --- INICIALIZAÇÃO NO DOMContentLoaded ---
         document.addEventListener('DOMContentLoaded', function() {
-            // 1. Inicia a contagem e a chuva de corações
             updateCountdown(); 
             countdownInterval = setInterval(updateCountdown, 1000);
             setInterval(createHeart, 300);
             
-            // 2. Configura os listeners para as abas do Mosaico
             document.querySelectorAll('.tab-button').forEach(button => {
                 button.addEventListener('click', (e) => {
                     changeTab(e.target.getAttribute('data-tab'));
@@ -774,4 +764,3 @@
     </script>
 </body>
 </html>
-
